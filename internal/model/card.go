@@ -14,7 +14,6 @@ const (
 	StatusActive    Status = "active"
 	StatusBlocked   Status = "block"
 	StatusClosed    Status = "closed"
-	StatusNull      Status = "null"
 )
 
 var (

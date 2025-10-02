@@ -29,8 +29,8 @@ func (repo *memRepo) Get(id string) (*model.Card, error) {
 	repo.mutex.Lock()
 	defer repo.mutex.Unlock()
 
-	card, err := repo.cards[id]
-	if err {
+	card, ok := repo.cards[id]
+	if !ok {
 		return nil, model.ErrNotFound
 	}
 
