@@ -10,7 +10,7 @@ func CardToProto(card *model.Card) *cardpb.Card {
 	return &cardpb.Card{
 		Id:        card.ID,
 		UserId:    card.UserID,
-		Status:    card.Status,
+		Status:    string(card.Status),
 		UpdatedAt: card.UpdatedAt.Format(time.RFC3339),
 	}
 }
@@ -24,7 +24,7 @@ func ProtoToCard(card *cardpb.Card) *model.Card {
 	return &model.Card{
 		ID:        card.GetId(),
 		UserID:    card.GetUserId(),
-		Status:    card.GetStatus(),
+		Status:    model.Status(card.GetStatus()),
 		UpdatedAt: updatedAt,
 	}
 }

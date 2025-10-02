@@ -1,5 +1,7 @@
 package model
 
+import "fmt"
+
 type Event string
 
 const (
@@ -11,10 +13,10 @@ const (
 
 type CardState interface {
 	Name() Status
-	Validate(card *Card) error
+	Validate(card *Card, evt Event) error
 	Before(card *Card, evt Event) error
+	Action(evt Event) (CardState, error)
 	After(card *Card, evt Event) error
-	Action(evt Event) (Status, error)
 }
 
 var stateRegistry = map[Status]func() CardState{
@@ -38,7 +40,7 @@ func (card *Card) Transition(evt Event) error {
 		return err
 	}
 
-	if err := state.Validate(card); err != nil {
+	if err := state.Validate(card, evt); err != nil {
 		return err
 	}
 
@@ -46,13 +48,13 @@ func (card *Card) Transition(evt Event) error {
 		return err
 	}
 
-	newStatus, err := state.Action(evt)
+	newState, err := state.Action(evt)
 	if err != nil {
 		return err
 	}
 
 	prevStatus := card.Status
-	card.Status = newStatus
+	card.Status = newState.Name()
 
 	if err := state.After(card, evt); err != nil {
 		card.Status = prevStatus
@@ -64,62 +66,128 @@ func (card *Card) Transition(evt Event) error {
 
 type RequestedState struct{}
 
-func (state *RequestedState) Name() Status                       { return StatusRequested }
-func (state *RequestedState) Validate(card *Card) error          { return nil }
-func (state *RequestedState) Before(card *Card, evt Event) error { return nil }
-func (state *RequestedState) After(card *Card, evt Event) error  { return nil }
-func (state *RequestedState) Action(evt Event) (Status, error) {
+func (state *RequestedState) Name() Status {
+	return StatusRequested
+}
+
+func (state *RequestedState) Validate(card *Card, evt Event) error {
 	switch evt {
 	case EventActivate:
-		return StatusActive, nil
+		return nil
 	default:
-		return StatusNull, ErrInvalidTransition
+		return ErrInvalidTransition
 	}
+}
+
+func (state *RequestedState) Before(card *Card, evt Event) error {
+	return nil
+}
+
+func (state *RequestedState) Action(evt Event) (CardState, error) {
+	switch evt {
+	case EventActivate:
+		return createState(StatusActive)
+	default:
+		panic(fmt.Sprintf("Unexpected event: %v", evt))
+	}
+}
+
+func (state *RequestedState) After(card *Card, evt Event) error {
+	return nil
 }
 
 type ActiveState struct{}
 
-func (state *ActiveState) Name() Status                       { return StatusActive }
-func (state *ActiveState) Validate(card *Card) error          { return nil }
-func (state *ActiveState) Before(card *Card, evt Event) error { return nil }
-func (state *ActiveState) After(card *Card, evt Event) error  { return nil }
-func (state *ActiveState) Action(evt Event) (Status, error) {
+func (state *ActiveState) Name() Status {
+	return StatusActive
+}
+
+func (state *ActiveState) Validate(card *Card, evt Event) error {
+	switch evt {
+	case EventBlock, EventClose:
+		return nil
+	default:
+		return ErrInvalidTransition
+	}
+}
+
+func (state *ActiveState) Before(card *Card, evt Event) error {
+	return nil
+}
+
+func (state *ActiveState) Action(evt Event) (CardState, error) {
 	switch evt {
 	case EventBlock:
-		return StatusBlocked, nil
+		return createState(StatusBlocked)
 	case EventClose:
-		return StatusClosed, nil
+		return createState(StatusClosed)
 	default:
-		return StatusNull, ErrInvalidTransition
+		panic(fmt.Sprintf("Unexpected event: %v", evt))
 	}
+}
+
+func (state *ActiveState) After(card *Card, evt Event) error {
+	return nil
 }
 
 type BlockedState struct{}
 
-func (state *BlockedState) Name() Status                       { return StatusBlocked }
-func (state *BlockedState) Validate(card *Card) error          { return nil }
-func (state *BlockedState) Before(card *Card, evt Event) error { return nil }
-func (state *BlockedState) After(card *Card, evt Event) error  { return nil }
-func (state *BlockedState) Action(evt Event) (Status, error) {
+func (state *BlockedState) Name() Status {
+	return StatusBlocked
+}
+
+func (state *BlockedState) Validate(card *Card, evt Event) error {
+	switch evt {
+	case EventUnblock, EventClose:
+		return nil
+	default:
+		return ErrInvalidTransition
+	}
+}
+
+func (state *BlockedState) Before(card *Card, evt Event) error {
+	return nil
+}
+
+func (state *BlockedState) Action(evt Event) (CardState, error) {
 	switch evt {
 	case EventUnblock:
-		return StatusActive, nil
+		return createState(StatusActive)
 	case EventClose:
-		return StatusClosed, nil
+		return createState(StatusClosed)
 	default:
-		return StatusNull, ErrInvalidTransition
+		panic(fmt.Sprintf("Unexpected event: %v", evt))
 	}
+}
+
+func (state *BlockedState) After(card *Card, evt Event) error {
+	return nil
 }
 
 type ClosedState struct{}
 
-func (state *ClosedState) Name() Status                       { return StatusClosed }
-func (state *ClosedState) Validate(card *Card) error          { return nil }
-func (state *ClosedState) Before(card *Card, evt Event) error { return nil }
-func (state *ClosedState) After(card *Card, evt Event) error  { return nil }
-func (state *ClosedState) Action(evt Event) (Status, error) {
+func (state *ClosedState) Name() Status {
+	return StatusClosed
+}
+
+func (state *ClosedState) Validate(card *Card, evt Event) error {
 	switch evt {
 	default:
-		return StatusNull, ErrInvalidTransition
+		return ErrInvalidTransition
 	}
+}
+
+func (state *ClosedState) Before(card *Card, evt Event) error {
+	return nil
+}
+
+func (state *ClosedState) Action(evt Event) (CardState, error) {
+	switch evt {
+	default:
+		panic(fmt.Sprintf("Unexpected event: %v", evt))
+	}
+}
+
+func (state *ClosedState) After(card *Card, evt Event) error {
+	return nil
 }
