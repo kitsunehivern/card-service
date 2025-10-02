@@ -6,25 +6,25 @@ import (
 	"time"
 )
 
-func CardToProto(c *model.Card) *cardpb.Card {
+func CardToProto(card *model.Card) *cardpb.Card {
 	return &cardpb.Card{
-		Id:        c.ID,
-		UserId:    c.UserID,
-		Status:    c.Status,
-		UpdatedAt: c.UpdatedAt.Format(time.RFC3339),
+		Id:        card.ID,
+		UserId:    card.UserID,
+		Status:    card.Status,
+		UpdatedAt: card.UpdatedAt.Format(time.RFC3339),
 	}
 }
 
-func ProtoToCard(c *cardpb.Card) *model.Card {
-	updatedAt, err := time.Parse(time.RFC3339, c.GetUpdatedAt())
+func ProtoToCard(card *cardpb.Card) *model.Card {
+	updatedAt, err := time.Parse(time.RFC3339, card.GetUpdatedAt())
 	if err != nil {
 		updatedAt = time.Now().UTC()
 	}
 
 	return &model.Card{
-		ID:        c.GetId(),
-		UserID:    c.GetUserId(),
-		Status:    c.GetStatus(),
+		ID:        card.GetId(),
+		UserID:    card.GetUserId(),
+		Status:    card.GetStatus(),
 		UpdatedAt: updatedAt,
 	}
 }

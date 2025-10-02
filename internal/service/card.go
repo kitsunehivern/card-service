@@ -20,33 +20,33 @@ func NewService(r repo.Repository) *CardService {
 }
 
 func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardRequest) (*cardpb.RequestCardResponse, error) {
-	c := model.New(req.GetUserId())
-	if err := cs.repo.Create(c); err != nil {
+	card := model.New(req.GetUserId())
+	if err := cs.repo.Create(card); err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
-	return &cardpb.RequestCardResponse{Card: adapter.CardToProto(c)}, nil
+	return &cardpb.RequestCardResponse{Card: adapter.CardToProto(card)}, nil
 }
 
-func (cs *CardService) mutateCard(ctx context.Context, id string, mutate func(c *model.Card) error) (*model.Card, error) {
-	c, err := cs.repo.Get(id)
+func (cs *CardService) mutateCard(ctx context.Context, id string, event model.Event) (*model.Card, error) {
+	card, err := cs.repo.Get(id)
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, err.Error())
 	}
 
-	if err := mutate(c); err != nil {
+	if err := card.Transition(event); err != nil {
 		return nil, status.Errorf(codes.FailedPrecondition, err.Error())
 	}
 
-	if err := cs.repo.Update(c); err != nil {
+	if err := cs.repo.Update(card); err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
-	return c, nil
+	return card, nil
 }
 
 func (cs *CardService) ActivateCard(ctx context.Context, req *cardpb.ActivateCardRequest) (*cardpb.ActivateCardResponse, error) {
-	c, err := cs.mutateCard(ctx, req.GetId(), (*model.Card).Activate)
+	c, err := cs.mutateCard(ctx, req.GetId(), model.EventActivate)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func (cs *CardService) ActivateCard(ctx context.Context, req *cardpb.ActivateCar
 }
 
 func (cs *CardService) BlockCard(ctx context.Context, req *cardpb.BlockCardRequest) (*cardpb.BlockCardResponse, error) {
-	c, err := cs.mutateCard(ctx, req.GetId(), (*model.Card).Block)
+	c, err := cs.mutateCard(ctx, req.GetId(), model.EventBlock)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (cs *CardService) BlockCard(ctx context.Context, req *cardpb.BlockCardReque
 }
 
 func (cs *CardService) UnblockCard(ctx context.Context, req *cardpb.UnblockCardRequest) (*cardpb.UnblockCardResponse, error) {
-	c, err := cs.mutateCard(ctx, req.GetId(), (*model.Card).Unblock)
+	c, err := cs.mutateCard(ctx, req.GetId(), model.EventUnblock)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func (cs *CardService) UnblockCard(ctx context.Context, req *cardpb.UnblockCardR
 }
 
 func (cs *CardService) CloseCard(ctx context.Context, req *cardpb.CloseCardRequest) (*cardpb.CloseCardResponse, error) {
-	c, err := cs.mutateCard(ctx, req.GetId(), (*model.Card).Close)
+	c, err := cs.mutateCard(ctx, req.GetId(), model.EventClose)
 	if err != nil {
 		return nil, err
 	}

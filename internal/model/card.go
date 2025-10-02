@@ -7,22 +7,26 @@ import (
 	"github.com/google/uuid"
 )
 
+type Status string
+
 const (
-	StatusRequested = "REQUESTED"
-	StatusActive    = "ACTIVE"
-	StatusBlocked   = "BLOCK"
-	StatusClosed    = "CLOSED"
+	StatusRequested Status = "requested"
+	StatusActive    Status = "active"
+	StatusBlocked   Status = "block"
+	StatusClosed    Status = "closed"
+	StatusNull      Status = "null"
 )
 
 var (
-	ErrNotFound     = errors.New("model not found")
-	ErrInvalidState = errors.New("invalid state transition")
+	ErrNotFound          = errors.New("card not found")
+	ErrUnknownStatus     = errors.New("unknown status")
+	ErrInvalidTransition = errors.New("invalid status transition")
 )
 
 type Card struct {
 	ID        string    `json:"id" db:"id"`
 	UserID    string    `json:"user_id" db:"user_id"`
-	Status    string    `json:"status" db:"status"`
+	Status    Status    `json:"status" db:"status"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 }
 
@@ -35,50 +39,6 @@ func New(userId string) *Card {
 	}
 }
 
-func (c *Card) touch() {
-	c.UpdatedAt = time.Now().UTC()
-}
-
-func (c *Card) Activate() error {
-	switch c.Status {
-	case StatusRequested:
-		c.Status = StatusActive
-		c.touch()
-		return nil
-	default:
-		return ErrInvalidState
-	}
-}
-
-func (c *Card) Block() error {
-	switch c.Status {
-	case StatusActive:
-		c.Status = StatusBlocked
-		c.touch()
-		return nil
-	default:
-		return ErrInvalidState
-	}
-}
-
-func (c *Card) Unblock() error {
-	switch c.Status {
-	case StatusBlocked:
-		c.Status = StatusActive
-		c.touch()
-		return nil
-	default:
-		return ErrInvalidState
-	}
-}
-
-func (c *Card) Close() error {
-	switch c.Status {
-	case StatusActive, StatusBlocked:
-		c.Status = StatusClosed
-		c.touch()
-		return nil
-	default:
-		return ErrInvalidState
-	}
+func (card *Card) touch() {
+	card.UpdatedAt = time.Now().UTC()
 }

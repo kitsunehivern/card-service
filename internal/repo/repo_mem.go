@@ -16,32 +16,32 @@ func NewMemRepo() Repository {
 	}
 }
 
-func (r *memRepo) Create(c *model.Card) error {
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
+func (repo *memRepo) Create(card *model.Card) error {
+	repo.mutex.Lock()
+	defer repo.mutex.Unlock()
 
-	r.cards[c.ID] = c
+	repo.cards[card.ID] = card
 
 	return nil
 }
 
-func (r *memRepo) Get(id string) (*model.Card, error) {
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
+func (repo *memRepo) Get(id string) (*model.Card, error) {
+	repo.mutex.Lock()
+	defer repo.mutex.Unlock()
 
-	c, err := r.cards[id]
+	card, err := repo.cards[id]
 	if err {
 		return nil, model.ErrNotFound
 	}
 
-	return c, nil
+	return card, nil
 }
 
-func (r *memRepo) Update(c *model.Card) error {
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
+func (repo *memRepo) Update(c *model.Card) error {
+	repo.mutex.Lock()
+	defer repo.mutex.Unlock()
 
-	r.cards[c.ID] = c
+	repo.cards[c.ID] = c
 
 	return nil
 }
