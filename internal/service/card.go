@@ -71,6 +71,14 @@ func (cs *CardService) UnblockCard(ctx context.Context, req *cardpb.UnblockCardR
 	return &cardpb.UnblockCardResponse{Card: adapter.CardToProto(c)}, nil
 }
 
+func (cs *CardService) RetireCard(ctx context.Context, req *cardpb.RetireCardRequest) (*cardpb.RetireCardResponse, error) {
+	c, err := cs.mutateCard(ctx, req.GetId(), model.EventRetire)
+	if err != nil {
+		return nil, err
+	}
+	return &cardpb.RetireCardResponse{Card: adapter.CardToProto(c)}, nil
+}
+
 func (cs *CardService) CloseCard(ctx context.Context, req *cardpb.CloseCardRequest) (*cardpb.CloseCardResponse, error) {
 	c, err := cs.mutateCard(ctx, req.GetId(), model.EventClose)
 	if err != nil {

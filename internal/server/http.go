@@ -22,6 +22,7 @@ func NewRouter(cardSvc *service.CardService) *gin.Engine {
 	r.PATCH("/card/:id/activate", cardHdl.ActivateCard)
 	r.PATCH("/card/:id/block", cardHdl.BlockCard)
 	r.PATCH("/card/:id/unblock", cardHdl.UnblockCard)
+	r.PATCH("/card/:id/retire", cardHdl.RetireCard)
 	r.PATCH("/card/:id/close", cardHdl.CloseCard)
 
 	return r
