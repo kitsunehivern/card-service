@@ -12,7 +12,7 @@ type Status string
 const (
 	StatusRequested Status = "requested"
 	StatusActive    Status = "active"
-	StatusBlocked   Status = "block"
+	StatusBlocked   Status = "blocked"
 	StatusClosed    Status = "closed"
 )
 

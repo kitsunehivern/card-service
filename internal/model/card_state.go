@@ -1,6 +1,8 @@
 package model
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Event string
 
@@ -19,6 +21,22 @@ type CardState interface {
 	After(card *Card, evt Event) error
 }
 
+type CardSMInput struct {
+	card *Card
+}
+
+func NewCardSMInput(card *Card) CardSMInput {
+	return CardSMInput{card: card}
+}
+
+type CardSM struct {
+	input CardSMInput
+}
+
+func NewCardSM(input CardSMInput) *CardSM {
+	return &CardSM{input: input}
+}
+
 var stateRegistry = map[Status]func() CardState{
 	StatusRequested: func() CardState { return &RequestedState{} },
 	StatusActive:    func() CardState { return &ActiveState{} },
@@ -34,17 +52,17 @@ func createState(status Status) (CardState, error) {
 	return nil, ErrUnknownStatus
 }
 
-func (card *Card) Transition(evt Event) error {
-	state, err := createState(card.Status)
+func (sm *CardSM) Transition(evt Event) error {
+	state, err := createState(sm.input.card.Status)
 	if err != nil {
 		return err
 	}
 
-	if err := state.Validate(card, evt); err != nil {
+	if err := state.Validate(sm.input.card, evt); err != nil {
 		return err
 	}
 
-	if err := state.Before(card, evt); err != nil {
+	if err := state.Before(sm.input.card, evt); err != nil {
 		return err
 	}
 
@@ -53,11 +71,11 @@ func (card *Card) Transition(evt Event) error {
 		return err
 	}
 
-	prevStatus := card.Status
-	card.Status = newState.Name()
+	prevStatus := sm.input.card.Status
+	sm.input.card.Status = newState.Name()
 
-	if err := state.After(card, evt); err != nil {
-		card.Status = prevStatus
+	if err := state.After(sm.input.card, evt); err != nil {
+		sm.input.card.Status = prevStatus
 		return err
 	}
 
