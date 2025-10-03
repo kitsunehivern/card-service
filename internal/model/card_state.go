@@ -1,6 +1,9 @@
 package model
 
-import "fmt"
+import (
+	"card-service/internal/errmsg"
+	"fmt"
+)
 
 type Event string
 
@@ -8,14 +11,13 @@ const (
 	EventActivate Event = "activate"
 	EventBlock    Event = "block"
 	EventUnblock  Event = "unblock"
+	EventRetire   Event = "retire"
 	EventClose    Event = "close"
 )
 
 type CardState interface {
 	Name() Status
-	Validate(card *Card, evt Event) error
 	Before(card *Card, evt Event) error
-	Action(evt Event) (CardState, error)
 	After(card *Card, evt Event) error
 }
 
@@ -26,38 +28,99 @@ var stateRegistry = map[Status]func() CardState{
 	StatusClosed:    func() CardState { return &ClosedState{} },
 }
 
-func createState(status Status) (CardState, error) {
+func createState(status Status) CardState {
 	if create, ok := stateRegistry[status]; ok {
-		return create(), nil
+		return create()
 	}
 
-	return nil, ErrUnknownStatus
+	panic(fmt.Sprintf("Card status %v not registered", status))
 }
 
-func (card *Card) Transition(evt Event) error {
-	state, err := createState(card.Status)
-	if err != nil {
+type CardSMInput struct {
+	card *Card
+}
+
+func NewCardSMInput(card *Card) CardSMInput {
+	return CardSMInput{card: card}
+}
+
+type CardSM struct {
+	input CardSMInput
+}
+
+func NewCardSM(input CardSMInput) *CardSM {
+	return &CardSM{input: input}
+}
+
+type ConditionFunc func(*Card) bool
+
+type NextStateCondition struct {
+	next       Status
+	conditions []ConditionFunc
+}
+
+func (csm *CardSM) Validate(evt Event) error {
+	events, ok := transConditions[csm.input.card.Status]
+	if !ok {
+		panic(fmt.Sprintf("Card status %v not registered", csm.input.card.Status))
+	}
+
+	state, ok := events[evt]
+	if !ok {
+		return errmsg.CardInvalidStateTransition
+	}
+
+	for _, check := range state.conditions {
+		if !check(csm.input.card) {
+			return errmsg.CardInvalidStateTransition
+		}
+	}
+
+	return nil
+}
+
+func (csm *CardSM) Action(evt Event) CardState {
+	return createState(transConditions[csm.input.card.Status][evt].next)
+}
+
+func canBeRetired(card *Card) bool {
+	return card.Debit > card.Credit
+}
+
+var transConditions = map[Status]map[Event]NextStateCondition{
+	StatusRequested: {
+		EventActivate: {next: StatusActive},
+		EventClose:    {next: StatusClosed},
+	}, StatusActive: {
+		EventBlock:  {next: StatusBlocked},
+		EventClose:  {next: StatusClosed},
+		EventRetire: {next: StatusRetired, conditions: []ConditionFunc{canBeRetired}},
+	}, StatusBlocked: {
+		EventUnblock: {next: StatusActive},
+		EventClose:   {next: StatusClosed},
+		EventRetire:  {next: StatusRetired, conditions: []ConditionFunc{canBeRetired}},
+	}, StatusRetired: {
+		EventClose: {next: StatusClosed},
+	}, StatusClosed: {},
+}
+
+func (csm *CardSM) Transition(evt Event) error {
+	state := createState(csm.input.card.Status)
+
+	if err := csm.Validate(evt); err != nil {
 		return err
 	}
 
-	if err := state.Validate(card, evt); err != nil {
+	if err := state.Before(csm.input.card, evt); err != nil {
 		return err
 	}
 
-	if err := state.Before(card, evt); err != nil {
-		return err
-	}
+	newState := csm.Action(evt)
+	prevStatus := csm.input.card.Status
+	csm.input.card.Status = newState.Name()
 
-	newState, err := state.Action(evt)
-	if err != nil {
-		return err
-	}
-
-	prevStatus := card.Status
-	card.Status = newState.Name()
-
-	if err := state.After(card, evt); err != nil {
-		card.Status = prevStatus
+	if err := state.After(csm.input.card, evt); err != nil {
+		csm.input.card.Status = prevStatus
 		return err
 	}
 
@@ -66,128 +129,30 @@ func (card *Card) Transition(evt Event) error {
 
 type RequestedState struct{}
 
-func (state *RequestedState) Name() Status {
-	return StatusRequested
-}
-
-func (state *RequestedState) Validate(card *Card, evt Event) error {
-	switch evt {
-	case EventActivate:
-		return nil
-	default:
-		return ErrInvalidTransition
-	}
-}
-
-func (state *RequestedState) Before(card *Card, evt Event) error {
-	return nil
-}
-
-func (state *RequestedState) Action(evt Event) (CardState, error) {
-	switch evt {
-	case EventActivate:
-		return createState(StatusActive)
-	default:
-		panic(fmt.Sprintf("Unexpected event: %v", evt))
-	}
-}
-
-func (state *RequestedState) After(card *Card, evt Event) error {
-	return nil
-}
+func (state *RequestedState) Name() Status                       { return StatusRequested }
+func (state *RequestedState) Before(card *Card, evt Event) error { return nil }
+func (state *RequestedState) After(card *Card, evt Event) error  { return nil }
 
 type ActiveState struct{}
 
-func (state *ActiveState) Name() Status {
-	return StatusActive
-}
-
-func (state *ActiveState) Validate(card *Card, evt Event) error {
-	switch evt {
-	case EventBlock, EventClose:
-		return nil
-	default:
-		return ErrInvalidTransition
-	}
-}
-
-func (state *ActiveState) Before(card *Card, evt Event) error {
-	return nil
-}
-
-func (state *ActiveState) Action(evt Event) (CardState, error) {
-	switch evt {
-	case EventBlock:
-		return createState(StatusBlocked)
-	case EventClose:
-		return createState(StatusClosed)
-	default:
-		panic(fmt.Sprintf("Unexpected event: %v", evt))
-	}
-}
-
-func (state *ActiveState) After(card *Card, evt Event) error {
-	return nil
-}
+func (state *ActiveState) Name() Status                       { return StatusActive }
+func (state *ActiveState) Before(card *Card, evt Event) error { return nil }
+func (state *ActiveState) After(card *Card, evt Event) error  { return nil }
 
 type BlockedState struct{}
 
-func (state *BlockedState) Name() Status {
-	return StatusBlocked
-}
+func (state *BlockedState) Name() Status                       { return StatusBlocked }
+func (state *BlockedState) Before(card *Card, evt Event) error { return nil }
+func (state *BlockedState) After(card *Card, evt Event) error  { return nil }
 
-func (state *BlockedState) Validate(card *Card, evt Event) error {
-	switch evt {
-	case EventUnblock, EventClose:
-		return nil
-	default:
-		return ErrInvalidTransition
-	}
-}
+type RetiredState struct{}
 
-func (state *BlockedState) Before(card *Card, evt Event) error {
-	return nil
-}
-
-func (state *BlockedState) Action(evt Event) (CardState, error) {
-	switch evt {
-	case EventUnblock:
-		return createState(StatusActive)
-	case EventClose:
-		return createState(StatusClosed)
-	default:
-		panic(fmt.Sprintf("Unexpected event: %v", evt))
-	}
-}
-
-func (state *BlockedState) After(card *Card, evt Event) error {
-	return nil
-}
+func (state *RetiredState) Name() Status                       { return StatusRetired }
+func (state *RetiredState) Before(card *Card, evt Event) error { return nil }
+func (state *RetiredState) After(card *Card, evt Event) error  { return nil }
 
 type ClosedState struct{}
 
-func (state *ClosedState) Name() Status {
-	return StatusClosed
-}
-
-func (state *ClosedState) Validate(card *Card, evt Event) error {
-	switch evt {
-	default:
-		return ErrInvalidTransition
-	}
-}
-
-func (state *ClosedState) Before(card *Card, evt Event) error {
-	return nil
-}
-
-func (state *ClosedState) Action(evt Event) (CardState, error) {
-	switch evt {
-	default:
-		panic(fmt.Sprintf("Unexpected event: %v", evt))
-	}
-}
-
-func (state *ClosedState) After(card *Card, evt Event) error {
-	return nil
-}
+func (state *ClosedState) Name() Status                       { return StatusClosed }
+func (state *ClosedState) Before(card *Card, evt Event) error { return nil }
+func (state *ClosedState) After(card *Card, evt Event) error  { return nil }
