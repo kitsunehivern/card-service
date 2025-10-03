@@ -6,9 +6,6 @@ import (
 	"card-service/internal/model"
 	"card-service/internal/repo"
 	"context"
-
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 type CardService struct {
@@ -22,7 +19,7 @@ func NewCardService(r repo.Repository) *CardService {
 func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardRequest) (*cardpb.RequestCardResponse, error) {
 	card := model.New(req.GetUserId())
 	if err := cs.repo.Create(card); err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return &cardpb.RequestCardResponse{Card: adapter.CardToProto(card)}, nil
@@ -31,17 +28,17 @@ func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardR
 func (cs *CardService) mutateCard(ctx context.Context, id string, event model.Event) (*model.Card, error) {
 	card, err := cs.repo.Get(id)
 	if err != nil {
-		return nil, status.Errorf(codes.NotFound, err.Error())
+		return nil, err
 	}
 
 	state := model.NewCardSM(model.NewCardSMInput(card))
 
 	if err := state.Transition(event); err != nil {
-		return nil, status.Errorf(codes.FailedPrecondition, err.Error())
+		return nil, err
 	}
 
 	if err := cs.repo.Update(card); err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return card, nil
@@ -90,8 +87,7 @@ func (cs *CardService) CloseCard(ctx context.Context, req *cardpb.CloseCardReque
 func (cs *CardService) GetCard(ctx context.Context, req *cardpb.GetCardRequest) (*cardpb.GetCardResponse, error) {
 	c, err := cs.repo.Get(req.GetId())
 	if err != nil {
-		return nil, status.Errorf(codes.NotFound, err.Error())
+		return nil, err
 	}
-
 	return &cardpb.GetCardResponse{Card: adapter.CardToProto(c)}, nil
 }

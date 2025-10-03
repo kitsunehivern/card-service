@@ -1,7 +1,6 @@
 package model
 
 import (
-	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -15,12 +14,6 @@ const (
 	StatusBlocked   Status = "blocked"
 	StatusRetired   Status = "retired"
 	StatusClosed    Status = "closed"
-)
-
-var (
-	ErrNotFound          = errors.New("card not found")
-	ErrUnknownStatus     = errors.New("unknown status")
-	ErrInvalidTransition = errors.New("invalid status transition")
 )
 
 type Card struct {

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"card-service/internal/errmsg"
 	"fmt"
 )
 
@@ -66,12 +67,12 @@ func (csm *CardSM) Validate(evt Event) error {
 
 	state, ok := events[evt]
 	if !ok {
-		return ErrInvalidTransition
+		return errmsg.CardInvalidStateTransition
 	}
 
 	for _, check := range state.conditions {
 		if !check(csm.input.card) {
-			return ErrInvalidTransition
+			return errmsg.CardInvalidStateTransition
 		}
 	}
 

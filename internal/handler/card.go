@@ -23,7 +23,7 @@ type RequestCardBody struct {
 func (ch *CardHandler) RequestCard(c *gin.Context) {
 	var body RequestCardBody
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -31,7 +31,7 @@ func (ch *CardHandler) RequestCard(c *gin.Context) {
 
 	resp, err := ch.cardSvc.RequestCard(c.Request.Context(), req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -44,7 +44,7 @@ func (ch *CardHandler) ActivateCard(c *gin.Context) {
 
 	resp, err := ch.cardSvc.ActivateCard(c.Request.Context(), req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -57,7 +57,7 @@ func (ch *CardHandler) BlockCard(c *gin.Context) {
 
 	resp, err := ch.cardSvc.BlockCard(c.Request.Context(), req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -70,7 +70,7 @@ func (ch *CardHandler) UnblockCard(c *gin.Context) {
 
 	resp, err := ch.cardSvc.UnblockCard(c.Request.Context(), req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -83,7 +83,7 @@ func (ch *CardHandler) CloseCard(c *gin.Context) {
 
 	resp, err := ch.cardSvc.CloseCard(c.Request.Context(), req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -96,7 +96,7 @@ func (ch *CardHandler) RetireCard(c *gin.Context) {
 
 	resp, err := ch.cardSvc.RetireCard(c.Request.Context(), req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -109,7 +109,7 @@ func (ch *CardHandler) GetCard(c *gin.Context) {
 
 	resp, err := ch.cardSvc.GetCard(c.Request.Context(), req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
