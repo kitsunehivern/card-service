@@ -174,7 +174,7 @@ type UnsafeCardServiceServer interface {
 func RegisterCardServiceServer(s grpc.ServiceRegistrar, srv CardServiceServer) {
 	// If the following call pancis, it indicates UnimplementedCardServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
-	// unimplemented method is ever invoked, so we test this at initialization
+	// unimplemented method is ever invoked, so we mock this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
