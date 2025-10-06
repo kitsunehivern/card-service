@@ -9,10 +9,10 @@ import (
 )
 
 type CardService struct {
-	repo repo.Repository
+	repo repo.IRepository
 }
 
-func NewCardService(r repo.Repository) *CardService {
+func NewCardService(r repo.IRepository) *CardService {
 	return &CardService{repo: r}
 }
 

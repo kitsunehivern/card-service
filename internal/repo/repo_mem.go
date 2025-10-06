@@ -12,7 +12,7 @@ type memRepo struct {
 	userIndex map[string]string
 }
 
-func NewMemRepo() Repository {
+func NewMemRepo() IRepository {
 	return &memRepo{
 		cards:     make(map[string]*model.Card),
 		userIndex: make(map[string]string),
