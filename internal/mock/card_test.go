@@ -47,18 +47,32 @@ func TestRequestCard(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			svc, repo := newServiceWithMock(t)
 
-			seen := map[string]bool{}
-			repo.
-				On("Create", mock.AnythingOfType("*model.Card")).
-				Return(func(c *model.Card) error {
-					if seen[c.UserID] {
-						return errmsg.CardAlreadyExists
-					}
+			createdUsers := map[string]bool{}
+			tmpCreatedUsers := map[string]bool{}
+			for i := 0; i < len(tc.userIDs); i++ {
+				repo.
+					On("HasCreatedCard", mock.AnythingOfType("string")).
+					Return(func(userID string) bool {
+						_, created := createdUsers[userID]
+						return created
+					}, func(userID string) error {
+						return nil
+					}).
+					Once()
 
-					seen[c.UserID] = true
-					return nil
-				}).
-				Times(len(tc.userIDs))
+				_, created := tmpCreatedUsers[tc.userIDs[i]]
+				if created {
+					continue
+				}
+				tmpCreatedUsers[tc.userIDs[i]] = true
+
+				repo.
+					On("CreateCard", mock.AnythingOfType("*model.Card")).
+					Return(func(c *model.Card) error {
+						createdUsers[c.UserID] = true
+						return nil
+					}).Once()
+			}
 
 			for i := 0; i < len(tc.userIDs); i++ {
 				resp, err := svc.RequestCard(context.Background(), &cardpb.RequestCardRequest{UserId: tc.userIDs[i]})
@@ -82,8 +96,8 @@ func TestRequestCard(t *testing.T) {
 			}
 
 			repo.AssertExpectations(t)
-			repo.AssertNotCalled(t, "Update", mock.Anything)
-			repo.AssertNotCalled(t, "Get", mock.Anything)
+			repo.AssertNotCalled(t, "UpdateCard", mock.Anything)
+			repo.AssertNotCalled(t, "GetCard", mock.Anything)
 		})
 	}
 }

@@ -3,7 +3,8 @@ package repo
 import "card-service/internal/model"
 
 type IRepository interface {
-	Create(*model.Card) error
-	Get(id string) (*model.Card, error)
-	Update(*model.Card) error
+	CreateCard(*model.Card) error
+	HasCreatedCard(string) (bool, error)
+	GetCard(string) (*model.Card, error)
+	UpdateCard(*model.Card) error
 }

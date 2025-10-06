@@ -193,6 +193,94 @@ func (x *RequestCardResponse) GetCard() *Card {
 	return nil
 }
 
+type HasCreatedCardRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HasCreatedCardRequest) Reset() {
+	*x = HasCreatedCardRequest{}
+	mi := &file_proto_card_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HasCreatedCardRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HasCreatedCardRequest) ProtoMessage() {}
+
+func (x *HasCreatedCardRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_card_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HasCreatedCardRequest.ProtoReflect.Descriptor instead.
+func (*HasCreatedCardRequest) Descriptor() ([]byte, []int) {
+	return file_proto_card_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *HasCreatedCardRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type HasCreatedCardResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Created       bool                   `protobuf:"varint,1,opt,name=created,proto3" json:"created,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HasCreatedCardResponse) Reset() {
+	*x = HasCreatedCardResponse{}
+	mi := &file_proto_card_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HasCreatedCardResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HasCreatedCardResponse) ProtoMessage() {}
+
+func (x *HasCreatedCardResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_card_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HasCreatedCardResponse.ProtoReflect.Descriptor instead.
+func (*HasCreatedCardResponse) Descriptor() ([]byte, []int) {
+	return file_proto_card_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *HasCreatedCardResponse) GetCreated() bool {
+	if x != nil {
+		return x.Created
+	}
+	return false
+}
+
 type ActivateCardRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -202,7 +290,7 @@ type ActivateCardRequest struct {
 
 func (x *ActivateCardRequest) Reset() {
 	*x = ActivateCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[3]
+	mi := &file_proto_card_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -214,7 +302,7 @@ func (x *ActivateCardRequest) String() string {
 func (*ActivateCardRequest) ProtoMessage() {}
 
 func (x *ActivateCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[3]
+	mi := &file_proto_card_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -227,7 +315,7 @@ func (x *ActivateCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActivateCardRequest.ProtoReflect.Descriptor instead.
 func (*ActivateCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{3}
+	return file_proto_card_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ActivateCardRequest) GetId() string {
@@ -246,7 +334,7 @@ type ActivateCardResponse struct {
 
 func (x *ActivateCardResponse) Reset() {
 	*x = ActivateCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[4]
+	mi := &file_proto_card_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -258,7 +346,7 @@ func (x *ActivateCardResponse) String() string {
 func (*ActivateCardResponse) ProtoMessage() {}
 
 func (x *ActivateCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[4]
+	mi := &file_proto_card_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -271,7 +359,7 @@ func (x *ActivateCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActivateCardResponse.ProtoReflect.Descriptor instead.
 func (*ActivateCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{4}
+	return file_proto_card_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ActivateCardResponse) GetCard() *Card {
@@ -290,7 +378,7 @@ type BlockCardRequest struct {
 
 func (x *BlockCardRequest) Reset() {
 	*x = BlockCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[5]
+	mi := &file_proto_card_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -302,7 +390,7 @@ func (x *BlockCardRequest) String() string {
 func (*BlockCardRequest) ProtoMessage() {}
 
 func (x *BlockCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[5]
+	mi := &file_proto_card_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -315,7 +403,7 @@ func (x *BlockCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlockCardRequest.ProtoReflect.Descriptor instead.
 func (*BlockCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{5}
+	return file_proto_card_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *BlockCardRequest) GetId() string {
@@ -334,7 +422,7 @@ type BlockCardResponse struct {
 
 func (x *BlockCardResponse) Reset() {
 	*x = BlockCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[6]
+	mi := &file_proto_card_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -346,7 +434,7 @@ func (x *BlockCardResponse) String() string {
 func (*BlockCardResponse) ProtoMessage() {}
 
 func (x *BlockCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[6]
+	mi := &file_proto_card_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -359,7 +447,7 @@ func (x *BlockCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlockCardResponse.ProtoReflect.Descriptor instead.
 func (*BlockCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{6}
+	return file_proto_card_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *BlockCardResponse) GetCard() *Card {
@@ -378,7 +466,7 @@ type UnblockCardRequest struct {
 
 func (x *UnblockCardRequest) Reset() {
 	*x = UnblockCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[7]
+	mi := &file_proto_card_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -390,7 +478,7 @@ func (x *UnblockCardRequest) String() string {
 func (*UnblockCardRequest) ProtoMessage() {}
 
 func (x *UnblockCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[7]
+	mi := &file_proto_card_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -403,7 +491,7 @@ func (x *UnblockCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnblockCardRequest.ProtoReflect.Descriptor instead.
 func (*UnblockCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{7}
+	return file_proto_card_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UnblockCardRequest) GetId() string {
@@ -422,7 +510,7 @@ type UnblockCardResponse struct {
 
 func (x *UnblockCardResponse) Reset() {
 	*x = UnblockCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[8]
+	mi := &file_proto_card_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -434,7 +522,7 @@ func (x *UnblockCardResponse) String() string {
 func (*UnblockCardResponse) ProtoMessage() {}
 
 func (x *UnblockCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[8]
+	mi := &file_proto_card_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -447,7 +535,7 @@ func (x *UnblockCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnblockCardResponse.ProtoReflect.Descriptor instead.
 func (*UnblockCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{8}
+	return file_proto_card_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UnblockCardResponse) GetCard() *Card {
@@ -466,7 +554,7 @@ type RetireCardRequest struct {
 
 func (x *RetireCardRequest) Reset() {
 	*x = RetireCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[9]
+	mi := &file_proto_card_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -478,7 +566,7 @@ func (x *RetireCardRequest) String() string {
 func (*RetireCardRequest) ProtoMessage() {}
 
 func (x *RetireCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[9]
+	mi := &file_proto_card_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -491,7 +579,7 @@ func (x *RetireCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RetireCardRequest.ProtoReflect.Descriptor instead.
 func (*RetireCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{9}
+	return file_proto_card_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *RetireCardRequest) GetId() string {
@@ -510,7 +598,7 @@ type RetireCardResponse struct {
 
 func (x *RetireCardResponse) Reset() {
 	*x = RetireCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[10]
+	mi := &file_proto_card_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -522,7 +610,7 @@ func (x *RetireCardResponse) String() string {
 func (*RetireCardResponse) ProtoMessage() {}
 
 func (x *RetireCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[10]
+	mi := &file_proto_card_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -535,7 +623,7 @@ func (x *RetireCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RetireCardResponse.ProtoReflect.Descriptor instead.
 func (*RetireCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{10}
+	return file_proto_card_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *RetireCardResponse) GetCard() *Card {
@@ -554,7 +642,7 @@ type CloseCardRequest struct {
 
 func (x *CloseCardRequest) Reset() {
 	*x = CloseCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[11]
+	mi := &file_proto_card_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -566,7 +654,7 @@ func (x *CloseCardRequest) String() string {
 func (*CloseCardRequest) ProtoMessage() {}
 
 func (x *CloseCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[11]
+	mi := &file_proto_card_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -579,7 +667,7 @@ func (x *CloseCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CloseCardRequest.ProtoReflect.Descriptor instead.
 func (*CloseCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{11}
+	return file_proto_card_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CloseCardRequest) GetId() string {
@@ -598,7 +686,7 @@ type CloseCardResponse struct {
 
 func (x *CloseCardResponse) Reset() {
 	*x = CloseCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[12]
+	mi := &file_proto_card_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -610,7 +698,7 @@ func (x *CloseCardResponse) String() string {
 func (*CloseCardResponse) ProtoMessage() {}
 
 func (x *CloseCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[12]
+	mi := &file_proto_card_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -623,7 +711,7 @@ func (x *CloseCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CloseCardResponse.ProtoReflect.Descriptor instead.
 func (*CloseCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{12}
+	return file_proto_card_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *CloseCardResponse) GetCard() *Card {
@@ -642,7 +730,7 @@ type GetCardRequest struct {
 
 func (x *GetCardRequest) Reset() {
 	*x = GetCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[13]
+	mi := &file_proto_card_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -654,7 +742,7 @@ func (x *GetCardRequest) String() string {
 func (*GetCardRequest) ProtoMessage() {}
 
 func (x *GetCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[13]
+	mi := &file_proto_card_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -667,7 +755,7 @@ func (x *GetCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCardRequest.ProtoReflect.Descriptor instead.
 func (*GetCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{13}
+	return file_proto_card_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetCardRequest) GetId() string {
@@ -686,7 +774,7 @@ type GetCardResponse struct {
 
 func (x *GetCardResponse) Reset() {
 	*x = GetCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[14]
+	mi := &file_proto_card_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -698,7 +786,7 @@ func (x *GetCardResponse) String() string {
 func (*GetCardResponse) ProtoMessage() {}
 
 func (x *GetCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[14]
+	mi := &file_proto_card_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -711,7 +799,7 @@ func (x *GetCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCardResponse.ProtoReflect.Descriptor instead.
 func (*GetCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{14}
+	return file_proto_card_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetCardResponse) GetCard() *Card {
@@ -738,7 +826,11 @@ const file_proto_card_proto_rawDesc = "" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"5\n" +
 	"\x13RequestCardResponse\x12\x1e\n" +
 	"\x04card\x18\x01 \x01(\v2\n" +
-	".main.CardR\x04card\"%\n" +
+	".main.CardR\x04card\"0\n" +
+	"\x15HasCreatedCardRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"2\n" +
+	"\x16HasCreatedCardResponse\x12\x18\n" +
+	"\acreated\x18\x01 \x01(\bR\acreated\"%\n" +
 	"\x13ActivateCardRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"6\n" +
 	"\x14ActivateCardResponse\x12\x1e\n" +
@@ -768,9 +860,10 @@ const file_proto_card_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"1\n" +
 	"\x0fGetCardResponse\x12\x1e\n" +
 	"\x04card\x18\x01 \x01(\v2\n" +
-	".main.CardR\x04card2\xd1\x03\n" +
+	".main.CardR\x04card2\x9e\x04\n" +
 	"\vCardService\x12B\n" +
-	"\vRequestCard\x12\x18.main.RequestCardRequest\x1a\x19.main.RequestCardResponse\x12E\n" +
+	"\vRequestCard\x12\x18.main.RequestCardRequest\x1a\x19.main.RequestCardResponse\x12K\n" +
+	"\x0eHasCreatedCard\x12\x1b.main.HasCreatedCardRequest\x1a\x1c.main.HasCreatedCardResponse\x12E\n" +
 	"\fActivateCard\x12\x19.main.ActivateCardRequest\x1a\x1a.main.ActivateCardResponse\x12<\n" +
 	"\tBlockCard\x12\x16.main.BlockCardRequest\x1a\x17.main.BlockCardResponse\x12B\n" +
 	"\vUnblockCard\x12\x18.main.UnblockCardRequest\x1a\x19.main.UnblockCardResponse\x12?\n" +
@@ -791,23 +884,25 @@ func file_proto_card_proto_rawDescGZIP() []byte {
 	return file_proto_card_proto_rawDescData
 }
 
-var file_proto_card_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_proto_card_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_proto_card_proto_goTypes = []any{
-	(*Card)(nil),                 // 0: main.Card
-	(*RequestCardRequest)(nil),   // 1: main.RequestCardRequest
-	(*RequestCardResponse)(nil),  // 2: main.RequestCardResponse
-	(*ActivateCardRequest)(nil),  // 3: main.ActivateCardRequest
-	(*ActivateCardResponse)(nil), // 4: main.ActivateCardResponse
-	(*BlockCardRequest)(nil),     // 5: main.BlockCardRequest
-	(*BlockCardResponse)(nil),    // 6: main.BlockCardResponse
-	(*UnblockCardRequest)(nil),   // 7: main.UnblockCardRequest
-	(*UnblockCardResponse)(nil),  // 8: main.UnblockCardResponse
-	(*RetireCardRequest)(nil),    // 9: main.RetireCardRequest
-	(*RetireCardResponse)(nil),   // 10: main.RetireCardResponse
-	(*CloseCardRequest)(nil),     // 11: main.CloseCardRequest
-	(*CloseCardResponse)(nil),    // 12: main.CloseCardResponse
-	(*GetCardRequest)(nil),       // 13: main.GetCardRequest
-	(*GetCardResponse)(nil),      // 14: main.GetCardResponse
+	(*Card)(nil),                   // 0: main.Card
+	(*RequestCardRequest)(nil),     // 1: main.RequestCardRequest
+	(*RequestCardResponse)(nil),    // 2: main.RequestCardResponse
+	(*HasCreatedCardRequest)(nil),  // 3: main.HasCreatedCardRequest
+	(*HasCreatedCardResponse)(nil), // 4: main.HasCreatedCardResponse
+	(*ActivateCardRequest)(nil),    // 5: main.ActivateCardRequest
+	(*ActivateCardResponse)(nil),   // 6: main.ActivateCardResponse
+	(*BlockCardRequest)(nil),       // 7: main.BlockCardRequest
+	(*BlockCardResponse)(nil),      // 8: main.BlockCardResponse
+	(*UnblockCardRequest)(nil),     // 9: main.UnblockCardRequest
+	(*UnblockCardResponse)(nil),    // 10: main.UnblockCardResponse
+	(*RetireCardRequest)(nil),      // 11: main.RetireCardRequest
+	(*RetireCardResponse)(nil),     // 12: main.RetireCardResponse
+	(*CloseCardRequest)(nil),       // 13: main.CloseCardRequest
+	(*CloseCardResponse)(nil),      // 14: main.CloseCardResponse
+	(*GetCardRequest)(nil),         // 15: main.GetCardRequest
+	(*GetCardResponse)(nil),        // 16: main.GetCardResponse
 }
 var file_proto_card_proto_depIdxs = []int32{
 	0,  // 0: main.RequestCardResponse.card:type_name -> main.Card
@@ -818,21 +913,23 @@ var file_proto_card_proto_depIdxs = []int32{
 	0,  // 5: main.CloseCardResponse.card:type_name -> main.Card
 	0,  // 6: main.GetCardResponse.card:type_name -> main.Card
 	1,  // 7: main.CardService.RequestCard:input_type -> main.RequestCardRequest
-	3,  // 8: main.CardService.ActivateCard:input_type -> main.ActivateCardRequest
-	5,  // 9: main.CardService.BlockCard:input_type -> main.BlockCardRequest
-	7,  // 10: main.CardService.UnblockCard:input_type -> main.UnblockCardRequest
-	9,  // 11: main.CardService.RetireCard:input_type -> main.RetireCardRequest
-	11, // 12: main.CardService.CloseCard:input_type -> main.CloseCardRequest
-	13, // 13: main.CardService.GetCard:input_type -> main.GetCardRequest
-	2,  // 14: main.CardService.RequestCard:output_type -> main.RequestCardResponse
-	4,  // 15: main.CardService.ActivateCard:output_type -> main.ActivateCardResponse
-	6,  // 16: main.CardService.BlockCard:output_type -> main.BlockCardResponse
-	8,  // 17: main.CardService.UnblockCard:output_type -> main.UnblockCardResponse
-	10, // 18: main.CardService.RetireCard:output_type -> main.RetireCardResponse
-	12, // 19: main.CardService.CloseCard:output_type -> main.CloseCardResponse
-	14, // 20: main.CardService.GetCard:output_type -> main.GetCardResponse
-	14, // [14:21] is the sub-list for method output_type
-	7,  // [7:14] is the sub-list for method input_type
+	3,  // 8: main.CardService.HasCreatedCard:input_type -> main.HasCreatedCardRequest
+	5,  // 9: main.CardService.ActivateCard:input_type -> main.ActivateCardRequest
+	7,  // 10: main.CardService.BlockCard:input_type -> main.BlockCardRequest
+	9,  // 11: main.CardService.UnblockCard:input_type -> main.UnblockCardRequest
+	11, // 12: main.CardService.RetireCard:input_type -> main.RetireCardRequest
+	13, // 13: main.CardService.CloseCard:input_type -> main.CloseCardRequest
+	15, // 14: main.CardService.GetCard:input_type -> main.GetCardRequest
+	2,  // 15: main.CardService.RequestCard:output_type -> main.RequestCardResponse
+	4,  // 16: main.CardService.HasCreatedCard:output_type -> main.HasCreatedCardResponse
+	6,  // 17: main.CardService.ActivateCard:output_type -> main.ActivateCardResponse
+	8,  // 18: main.CardService.BlockCard:output_type -> main.BlockCardResponse
+	10, // 19: main.CardService.UnblockCard:output_type -> main.UnblockCardResponse
+	12, // 20: main.CardService.RetireCard:output_type -> main.RetireCardResponse
+	14, // 21: main.CardService.CloseCard:output_type -> main.CloseCardResponse
+	16, // 22: main.CardService.GetCard:output_type -> main.GetCardResponse
+	15, // [15:23] is the sub-list for method output_type
+	7,  // [7:15] is the sub-list for method input_type
 	7,  // [7:7] is the sub-list for extension type_name
 	7,  // [7:7] is the sub-list for extension extendee
 	0,  // [0:7] is the sub-list for field type_name
@@ -849,7 +946,7 @@ func file_proto_card_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_card_proto_rawDesc), len(file_proto_card_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -3,6 +3,7 @@ package service
 import (
 	cardpb "card-service/gen/proto"
 	"card-service/internal/adapter"
+	"card-service/internal/errmsg"
 	"card-service/internal/model"
 	"card-service/internal/repo"
 	"context"
@@ -17,8 +18,17 @@ func NewCardService(r repo.IRepository) *CardService {
 }
 
 func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardRequest) (*cardpb.RequestCardResponse, error) {
+	created, err := cs.repo.HasCreatedCard(req.GetUserId())
+	if err != nil {
+		return nil, err
+	}
+
+	if created {
+		return nil, errmsg.CardAlreadyExists
+	}
+
 	card := model.New(req.GetUserId())
-	if err := cs.repo.Create(card); err != nil {
+	if err := cs.repo.CreateCard(card); err != nil {
 		return nil, err
 	}
 
@@ -26,7 +36,7 @@ func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardR
 }
 
 func (cs *CardService) mutateCard(ctx context.Context, id string, event model.Event) (*model.Card, error) {
-	card, err := cs.repo.Get(id)
+	card, err := cs.repo.GetCard(id)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +47,7 @@ func (cs *CardService) mutateCard(ctx context.Context, id string, event model.Ev
 		return nil, err
 	}
 
-	if err := cs.repo.Update(card); err != nil {
+	if err := cs.repo.UpdateCard(card); err != nil {
 		return nil, err
 	}
 
@@ -85,7 +95,7 @@ func (cs *CardService) CloseCard(ctx context.Context, req *cardpb.CloseCardReque
 }
 
 func (cs *CardService) GetCard(ctx context.Context, req *cardpb.GetCardRequest) (*cardpb.GetCardResponse, error) {
-	c, err := cs.repo.Get(req.GetId())
+	c, err := cs.repo.GetCard(req.GetId())
 	if err != nil {
 		return nil, err
 	}

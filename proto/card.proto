@@ -16,6 +16,9 @@ message Card {
 message RequestCardRequest { string user_id = 1; }
 message RequestCardResponse { Card card = 1; }
 
+message HasCreatedCardRequest { string user_id = 1; }
+message HasCreatedCardResponse { bool created = 1; }
+
 message ActivateCardRequest { string id = 1; }
 message ActivateCardResponse { Card card = 1; }
 
@@ -34,8 +37,10 @@ message CloseCardResponse { Card card = 1; }
 message GetCardRequest { string id = 1; }
 message GetCardResponse { Card card = 1; }
 
+
 service CardService {
     rpc RequestCard(RequestCardRequest) returns (RequestCardResponse);
+    rpc HasCreatedCard(HasCreatedCardRequest) returns (HasCreatedCardResponse);
     rpc ActivateCard(ActivateCardRequest) returns (ActivateCardResponse);
     rpc BlockCard(BlockCardRequest) returns (BlockCardResponse);
     rpc UnblockCard(UnblockCardRequest) returns (UnblockCardResponse);

@@ -13,12 +13,12 @@ type IRepository struct {
 	mock.Mock
 }
 
-// Create provides a mock function with given fields: _a0
-func (_m *IRepository) Create(_a0 *model.Card) error {
+// CreateCard provides a mock function with given fields: _a0
+func (_m *IRepository) CreateCard(_a0 *model.Card) error {
 	ret := _m.Called(_a0)
 
 	if len(ret) == 0 {
-		panic("no return value specified for Create")
+		panic("no return value specified for CreateCard")
 	}
 
 	var r0 error
@@ -31,21 +31,21 @@ func (_m *IRepository) Create(_a0 *model.Card) error {
 	return r0
 }
 
-// Get provides a mock function with given fields: id
-func (_m *IRepository) Get(id string) (*model.Card, error) {
-	ret := _m.Called(id)
+// GetCard provides a mock function with given fields: _a0
+func (_m *IRepository) GetCard(_a0 string) (*model.Card, error) {
+	ret := _m.Called(_a0)
 
 	if len(ret) == 0 {
-		panic("no return value specified for Get")
+		panic("no return value specified for GetCard")
 	}
 
 	var r0 *model.Card
 	var r1 error
 	if rf, ok := ret.Get(0).(func(string) (*model.Card, error)); ok {
-		return rf(id)
+		return rf(_a0)
 	}
 	if rf, ok := ret.Get(0).(func(string) *model.Card); ok {
-		r0 = rf(id)
+		r0 = rf(_a0)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.Card)
@@ -53,7 +53,7 @@ func (_m *IRepository) Get(id string) (*model.Card, error) {
 	}
 
 	if rf, ok := ret.Get(1).(func(string) error); ok {
-		r1 = rf(id)
+		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -61,12 +61,40 @@ func (_m *IRepository) Get(id string) (*model.Card, error) {
 	return r0, r1
 }
 
-// Update provides a mock function with given fields: _a0
-func (_m *IRepository) Update(_a0 *model.Card) error {
+// HasCreatedCard provides a mock function with given fields: _a0
+func (_m *IRepository) HasCreatedCard(_a0 string) (bool, error) {
 	ret := _m.Called(_a0)
 
 	if len(ret) == 0 {
-		panic("no return value specified for Update")
+		panic("no return value specified for HasCreatedCard")
+	}
+
+	var r0 bool
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string) (bool, error)); ok {
+		return rf(_a0)
+	}
+	if rf, ok := ret.Get(0).(func(string) bool); ok {
+		r0 = rf(_a0)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// UpdateCard provides a mock function with given fields: _a0
+func (_m *IRepository) UpdateCard(_a0 *model.Card) error {
+	ret := _m.Called(_a0)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateCard")
 	}
 
 	var r0 error
