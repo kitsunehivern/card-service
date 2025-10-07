@@ -7,37 +7,44 @@ import (
 )
 
 type memRepo struct {
-	mutex     sync.RWMutex
-	cards     map[string]*model.Card
-	userIndex map[string]string
+	mutex        sync.RWMutex
+	cards        map[string]*model.Card
+	createdUsers map[string]bool
 }
 
-func NewMemRepo() Repository {
+func NewMemRepo() IRepository {
 	return &memRepo{
-		cards:     make(map[string]*model.Card),
-		userIndex: make(map[string]string),
+		cards:        make(map[string]*model.Card),
+		createdUsers: make(map[string]bool),
 	}
 }
 
-func (repo *memRepo) Create(card *model.Card) error {
+func (repo *memRepo) CreateCard(card *model.Card) error {
 	repo.mutex.Lock()
 	defer repo.mutex.Unlock()
 
-	if _, exists := repo.userIndex[card.UserID]; exists {
-		return errmsg.CardAlreadyExists
-	}
-
 	repo.cards[card.ID] = card
-	repo.userIndex[card.UserID] = card.ID
+	repo.createdUsers[card.UserID] = true
 
 	return nil
 }
 
-func (repo *memRepo) Get(id string) (*model.Card, error) {
+func (repo *memRepo) CountCard(userID string) (int32, error) {
 	repo.mutex.Lock()
 	defer repo.mutex.Unlock()
 
-	card, ok := repo.cards[id]
+	_, ok := repo.createdUsers[userID]
+	if ok {
+		return 1, nil
+	}
+	return 0, nil
+}
+
+func (repo *memRepo) GetCard(ID string) (*model.Card, error) {
+	repo.mutex.Lock()
+	defer repo.mutex.Unlock()
+
+	card, ok := repo.cards[ID]
 	if !ok {
 		return nil, errmsg.CardNotFound
 	}
@@ -45,7 +52,7 @@ func (repo *memRepo) Get(id string) (*model.Card, error) {
 	return card, nil
 }
 
-func (repo *memRepo) Update(c *model.Card) error {
+func (repo *memRepo) UpdateCard(c *model.Card) error {
 	repo.mutex.Lock()
 	defer repo.mutex.Unlock()
 

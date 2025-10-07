@@ -34,6 +34,7 @@ message CloseCardResponse { Card card = 1; }
 message GetCardRequest { string id = 1; }
 message GetCardResponse { Card card = 1; }
 
+
 service CardService {
     rpc RequestCard(RequestCardRequest) returns (RequestCardResponse);
     rpc ActivateCard(ActivateCardRequest) returns (ActivateCardResponse);

@@ -36,6 +36,6 @@ func New(userId string) *Card {
 	}
 }
 
-func (card *Card) touch() {
+func (card *Card) Touch() {
 	card.UpdatedAt = time.Now().UTC()
 }

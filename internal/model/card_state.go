@@ -25,6 +25,7 @@ var stateRegistry = map[Status]func() CardState{
 	StatusRequested: func() CardState { return &RequestedState{} },
 	StatusActive:    func() CardState { return &ActiveState{} },
 	StatusBlocked:   func() CardState { return &BlockedState{} },
+	StatusRetired:   func() CardState { return &RetiredState{} },
 	StatusClosed:    func() CardState { return &ClosedState{} },
 }
 
@@ -115,6 +116,7 @@ func (csm *CardSM) Transition(evt Event) error {
 		return err
 	}
 
+	defer csm.input.card.Touch()
 	newState := csm.Action(evt)
 	prevStatus := csm.input.card.Status
 	csm.input.card.Status = newState.Name()

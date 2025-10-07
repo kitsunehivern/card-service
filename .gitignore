@@ -8,10 +8,10 @@
 *.so
 *.dylib
 
-# Test binary, built with `go test -c`
+# Test binary, built with `go mock -c`
 *.test
 
-# Code coverage profiles and other test artifacts
+# Code coverage profiles and other mock artifacts
 *.out
 coverage.*
 *.coverprofile
