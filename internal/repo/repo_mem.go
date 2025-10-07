@@ -40,11 +40,11 @@ func (repo *memRepo) CountCard(userID string) (int32, error) {
 	return 0, nil
 }
 
-func (repo *memRepo) GetCard(id string) (*model.Card, error) {
+func (repo *memRepo) GetCard(ID string) (*model.Card, error) {
 	repo.mutex.Lock()
 	defer repo.mutex.Unlock()
 
-	card, ok := repo.cards[id]
+	card, ok := repo.cards[ID]
 	if !ok {
 		return nil, errmsg.CardNotFound
 	}

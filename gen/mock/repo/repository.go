@@ -38,8 +38,8 @@ func (_m *MockIRepository) EXPECT() *MockIRepository_Expecter {
 }
 
 // CountCard provides a mock function for the type MockIRepository
-func (_mock *MockIRepository) CountCard(s string) (int32, error) {
-	ret := _mock.Called(s)
+func (_mock *MockIRepository) CountCard(userID string) (int32, error) {
+	ret := _mock.Called(userID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CountCard")
@@ -48,15 +48,15 @@ func (_mock *MockIRepository) CountCard(s string) (int32, error) {
 	var r0 int32
 	var r1 error
 	if returnFunc, ok := ret.Get(0).(func(string) (int32, error)); ok {
-		return returnFunc(s)
+		return returnFunc(userID)
 	}
 	if returnFunc, ok := ret.Get(0).(func(string) int32); ok {
-		r0 = returnFunc(s)
+		r0 = returnFunc(userID)
 	} else {
 		r0 = ret.Get(0).(int32)
 	}
 	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
-		r1 = returnFunc(s)
+		r1 = returnFunc(userID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -69,12 +69,12 @@ type MockIRepository_CountCard_Call struct {
 }
 
 // CountCard is a helper method to define mock.On call
-//   - s string
-func (_e *MockIRepository_Expecter) CountCard(s interface{}) *MockIRepository_CountCard_Call {
-	return &MockIRepository_CountCard_Call{Call: _e.mock.On("CountCard", s)}
+//   - userID string
+func (_e *MockIRepository_Expecter) CountCard(userID interface{}) *MockIRepository_CountCard_Call {
+	return &MockIRepository_CountCard_Call{Call: _e.mock.On("CountCard", userID)}
 }
 
-func (_c *MockIRepository_CountCard_Call) Run(run func(s string)) *MockIRepository_CountCard_Call {
+func (_c *MockIRepository_CountCard_Call) Run(run func(userID string)) *MockIRepository_CountCard_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 string
 		if args[0] != nil {
@@ -92,7 +92,7 @@ func (_c *MockIRepository_CountCard_Call) Return(n int32, err error) *MockIRepos
 	return _c
 }
 
-func (_c *MockIRepository_CountCard_Call) RunAndReturn(run func(s string) (int32, error)) *MockIRepository_CountCard_Call {
+func (_c *MockIRepository_CountCard_Call) RunAndReturn(run func(userID string) (int32, error)) *MockIRepository_CountCard_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -149,8 +149,8 @@ func (_c *MockIRepository_CreateCard_Call) RunAndReturn(run func(card *model.Car
 }
 
 // GetCard provides a mock function for the type MockIRepository
-func (_mock *MockIRepository) GetCard(s string) (*model.Card, error) {
-	ret := _mock.Called(s)
+func (_mock *MockIRepository) GetCard(ID string) (*model.Card, error) {
+	ret := _mock.Called(ID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetCard")
@@ -159,17 +159,17 @@ func (_mock *MockIRepository) GetCard(s string) (*model.Card, error) {
 	var r0 *model.Card
 	var r1 error
 	if returnFunc, ok := ret.Get(0).(func(string) (*model.Card, error)); ok {
-		return returnFunc(s)
+		return returnFunc(ID)
 	}
 	if returnFunc, ok := ret.Get(0).(func(string) *model.Card); ok {
-		r0 = returnFunc(s)
+		r0 = returnFunc(ID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.Card)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
-		r1 = returnFunc(s)
+		r1 = returnFunc(ID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -182,12 +182,12 @@ type MockIRepository_GetCard_Call struct {
 }
 
 // GetCard is a helper method to define mock.On call
-//   - s string
-func (_e *MockIRepository_Expecter) GetCard(s interface{}) *MockIRepository_GetCard_Call {
-	return &MockIRepository_GetCard_Call{Call: _e.mock.On("GetCard", s)}
+//   - ID string
+func (_e *MockIRepository_Expecter) GetCard(ID interface{}) *MockIRepository_GetCard_Call {
+	return &MockIRepository_GetCard_Call{Call: _e.mock.On("GetCard", ID)}
 }
 
-func (_c *MockIRepository_GetCard_Call) Run(run func(s string)) *MockIRepository_GetCard_Call {
+func (_c *MockIRepository_GetCard_Call) Run(run func(ID string)) *MockIRepository_GetCard_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 string
 		if args[0] != nil {
@@ -205,7 +205,7 @@ func (_c *MockIRepository_GetCard_Call) Return(card *model.Card, err error) *Moc
 	return _c
 }
 
-func (_c *MockIRepository_GetCard_Call) RunAndReturn(run func(s string) (*model.Card, error)) *MockIRepository_GetCard_Call {
+func (_c *MockIRepository_GetCard_Call) RunAndReturn(run func(ID string) (*model.Card, error)) *MockIRepository_GetCard_Call {
 	_c.Call.Return(run)
 	return _c
 }
