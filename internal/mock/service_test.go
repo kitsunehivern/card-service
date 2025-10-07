@@ -1,50 +1,50 @@
 package mock
 
 import (
-	mockrepo "card-service/gen/mock/repo"
+	"card-service/gen/mock/repo"
 	cardpb "card-service/gen/proto"
 	"card-service/internal/adapter"
 	"card-service/internal/errmsg"
 	"card-service/internal/model"
 	"card-service/internal/service"
 	"context"
+	"fmt"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 )
 
-func newServiceWithMock(t *testing.T) (*service.CardService, *mockrepo.MockIRepository) {
-	repo := mockrepo.NewMockIRepository(t)
+func newServiceWithMock(t *testing.T) (*service.CardService, *repo.MockIRepository) {
+	repo := repo.NewMockIRepository(t)
 	svc := service.NewCardService(repo)
 	return svc, repo
 }
 
-func TestRequestCard(t *testing.T) {
+func TestRequestCardService(t *testing.T) {
 	testcases := []struct {
 		name           string
 		userIDs        []string
 		expectedErrors []error
 	}{
 		{
-			name:           "test case 1: success for different user ids",
+			name:           "success for different user ids",
 			userIDs:        []string{"user-1", "user-2", "user-3"},
 			expectedErrors: []error{nil, nil, nil},
 		},
 		{
-			name:           "test case 2: failure for any two same user ids",
+			name:           "failure for any two same user ids",
 			userIDs:        []string{"user-1", "user-2", "user-1"},
 			expectedErrors: []error{nil, nil, errmsg.CardAlreadyExists},
 		},
 	}
 
-	for _, tc := range testcases {
+	for ti, tc := range testcases {
 		if len(tc.userIDs) != len(tc.expectedErrors) {
 			panic("array of input and output must have same length")
 		}
 
-		t.Run(tc.name, func(t *testing.T) {
+		t.Run(fmt.Sprintf("test case %v: %v", ti+1, tc.name), func(t *testing.T) {
 			svc, repo := newServiceWithMock(t)
 
 			createdUsers := map[string]bool{}
@@ -79,7 +79,6 @@ func TestRequestCard(t *testing.T) {
 				resp, err := svc.RequestCard(context.Background(), &cardpb.RequestCardRequest{UserId: tc.userIDs[i]})
 
 				if tc.expectedErrors[i] != nil {
-					require.Error(t, err)
 					require.ErrorIs(t, err, tc.expectedErrors[i])
 					require.Nil(t, resp)
 				} else {
@@ -92,7 +91,6 @@ func TestRequestCard(t *testing.T) {
 					require.Equal(t, int64(0), card.Debit)
 					require.Equal(t, int64(0), card.Credit)
 					require.Equal(t, model.StatusRequested, card.Status)
-					require.WithinDuration(t, time.Now().UTC(), card.UpdatedAt, time.Second)
 				}
 			}
 

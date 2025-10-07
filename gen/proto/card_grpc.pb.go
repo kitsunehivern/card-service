@@ -19,14 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CardService_RequestCard_FullMethodName    = "/main.CardService/RequestCard"
-	CardService_HasCreatedCard_FullMethodName = "/main.CardService/HasCreatedCard"
-	CardService_ActivateCard_FullMethodName   = "/main.CardService/ActivateCard"
-	CardService_BlockCard_FullMethodName      = "/main.CardService/BlockCard"
-	CardService_UnblockCard_FullMethodName    = "/main.CardService/UnblockCard"
-	CardService_RetireCard_FullMethodName     = "/main.CardService/RetireCard"
-	CardService_CloseCard_FullMethodName      = "/main.CardService/CloseCard"
-	CardService_GetCard_FullMethodName        = "/main.CardService/GetCard"
+	CardService_RequestCard_FullMethodName  = "/main.CardService/RequestCard"
+	CardService_ActivateCard_FullMethodName = "/main.CardService/ActivateCard"
+	CardService_BlockCard_FullMethodName    = "/main.CardService/BlockCard"
+	CardService_UnblockCard_FullMethodName  = "/main.CardService/UnblockCard"
+	CardService_RetireCard_FullMethodName   = "/main.CardService/RetireCard"
+	CardService_CloseCard_FullMethodName    = "/main.CardService/CloseCard"
+	CardService_GetCard_FullMethodName      = "/main.CardService/GetCard"
 )
 
 // CardServiceClient is the client API for CardService service.
@@ -34,7 +33,6 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CardServiceClient interface {
 	RequestCard(ctx context.Context, in *RequestCardRequest, opts ...grpc.CallOption) (*RequestCardResponse, error)
-	HasCreatedCard(ctx context.Context, in *HasCreatedCardRequest, opts ...grpc.CallOption) (*HasCreatedCardResponse, error)
 	ActivateCard(ctx context.Context, in *ActivateCardRequest, opts ...grpc.CallOption) (*ActivateCardResponse, error)
 	BlockCard(ctx context.Context, in *BlockCardRequest, opts ...grpc.CallOption) (*BlockCardResponse, error)
 	UnblockCard(ctx context.Context, in *UnblockCardRequest, opts ...grpc.CallOption) (*UnblockCardResponse, error)
@@ -55,16 +53,6 @@ func (c *cardServiceClient) RequestCard(ctx context.Context, in *RequestCardRequ
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RequestCardResponse)
 	err := c.cc.Invoke(ctx, CardService_RequestCard_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *cardServiceClient) HasCreatedCard(ctx context.Context, in *HasCreatedCardRequest, opts ...grpc.CallOption) (*HasCreatedCardResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HasCreatedCardResponse)
-	err := c.cc.Invoke(ctx, CardService_HasCreatedCard_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +124,6 @@ func (c *cardServiceClient) GetCard(ctx context.Context, in *GetCardRequest, opt
 // for forward compatibility.
 type CardServiceServer interface {
 	RequestCard(context.Context, *RequestCardRequest) (*RequestCardResponse, error)
-	HasCreatedCard(context.Context, *HasCreatedCardRequest) (*HasCreatedCardResponse, error)
 	ActivateCard(context.Context, *ActivateCardRequest) (*ActivateCardResponse, error)
 	BlockCard(context.Context, *BlockCardRequest) (*BlockCardResponse, error)
 	UnblockCard(context.Context, *UnblockCardRequest) (*UnblockCardResponse, error)
@@ -155,9 +142,6 @@ type UnimplementedCardServiceServer struct{}
 
 func (UnimplementedCardServiceServer) RequestCard(context.Context, *RequestCardRequest) (*RequestCardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequestCard not implemented")
-}
-func (UnimplementedCardServiceServer) HasCreatedCard(context.Context, *HasCreatedCardRequest) (*HasCreatedCardResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HasCreatedCard not implemented")
 }
 func (UnimplementedCardServiceServer) ActivateCard(context.Context, *ActivateCardRequest) (*ActivateCardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ActivateCard not implemented")
@@ -212,24 +196,6 @@ func _CardService_RequestCard_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CardServiceServer).RequestCard(ctx, req.(*RequestCardRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _CardService_HasCreatedCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HasCreatedCardRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CardServiceServer).HasCreatedCard(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CardService_HasCreatedCard_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CardServiceServer).HasCreatedCard(ctx, req.(*HasCreatedCardRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -352,10 +318,6 @@ var CardService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RequestCard",
 			Handler:    _CardService_RequestCard_Handler,
-		},
-		{
-			MethodName: "HasCreatedCard",
-			Handler:    _CardService_HasCreatedCard_Handler,
 		},
 		{
 			MethodName: "ActivateCard",

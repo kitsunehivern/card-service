@@ -1,5 +1,3 @@
-.PHONY: run mock
-
 run:
 	go run . server
 
