@@ -6,6 +6,7 @@ package repo
 
 import (
 	"card-service/internal/model"
+	"context"
 
 	mock "github.com/stretchr/testify/mock"
 )
@@ -37,77 +38,127 @@ func (_m *MockIRepository) EXPECT() *MockIRepository_Expecter {
 	return &MockIRepository_Expecter{mock: &_m.Mock}
 }
 
-// CountCard provides a mock function for the type MockIRepository
-func (_mock *MockIRepository) CountCard(userID string) (int32, error) {
-	ret := _mock.Called(userID)
+// Close provides a mock function for the type MockIRepository
+func (_mock *MockIRepository) Close() error {
+	ret := _mock.Called()
 
 	if len(ret) == 0 {
-		panic("no return value specified for CountCard")
+		panic("no return value specified for Close")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func() error); ok {
+		r0 = returnFunc()
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockIRepository_Close_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Close'
+type MockIRepository_Close_Call struct {
+	*mock.Call
+}
+
+// Close is a helper method to define mock.On call
+func (_e *MockIRepository_Expecter) Close() *MockIRepository_Close_Call {
+	return &MockIRepository_Close_Call{Call: _e.mock.On("Close")}
+}
+
+func (_c *MockIRepository_Close_Call) Run(run func()) *MockIRepository_Close_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *MockIRepository_Close_Call) Return(err error) *MockIRepository_Close_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockIRepository_Close_Call) RunAndReturn(run func() error) *MockIRepository_Close_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CountCardByUserID provides a mock function for the type MockIRepository
+func (_mock *MockIRepository) CountCardByUserID(ctx context.Context, userID string) (int32, error) {
+	ret := _mock.Called(ctx, userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CountCardByUserID")
 	}
 
 	var r0 int32
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string) (int32, error)); ok {
-		return returnFunc(userID)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) (int32, error)); ok {
+		return returnFunc(ctx, userID)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string) int32); ok {
-		r0 = returnFunc(userID)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) int32); ok {
+		r0 = returnFunc(ctx, userID)
 	} else {
 		r0 = ret.Get(0).(int32)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
-		r1 = returnFunc(userID)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = returnFunc(ctx, userID)
 	} else {
 		r1 = ret.Error(1)
 	}
 	return r0, r1
 }
 
-// MockIRepository_CountCard_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CountCard'
-type MockIRepository_CountCard_Call struct {
+// MockIRepository_CountCardByUserID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CountCardByUserID'
+type MockIRepository_CountCardByUserID_Call struct {
 	*mock.Call
 }
 
-// CountCard is a helper method to define mock.On call
+// CountCardByUserID is a helper method to define mock.On call
+//   - ctx context.Context
 //   - userID string
-func (_e *MockIRepository_Expecter) CountCard(userID interface{}) *MockIRepository_CountCard_Call {
-	return &MockIRepository_CountCard_Call{Call: _e.mock.On("CountCard", userID)}
+func (_e *MockIRepository_Expecter) CountCardByUserID(ctx interface{}, userID interface{}) *MockIRepository_CountCardByUserID_Call {
+	return &MockIRepository_CountCardByUserID_Call{Call: _e.mock.On("CountCardByUserID", ctx, userID)}
 }
 
-func (_c *MockIRepository_CountCard_Call) Run(run func(userID string)) *MockIRepository_CountCard_Call {
+func (_c *MockIRepository_CountCardByUserID_Call) Run(run func(ctx context.Context, userID string)) *MockIRepository_CountCardByUserID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
 }
 
-func (_c *MockIRepository_CountCard_Call) Return(n int32, err error) *MockIRepository_CountCard_Call {
+func (_c *MockIRepository_CountCardByUserID_Call) Return(n int32, err error) *MockIRepository_CountCardByUserID_Call {
 	_c.Call.Return(n, err)
 	return _c
 }
 
-func (_c *MockIRepository_CountCard_Call) RunAndReturn(run func(userID string) (int32, error)) *MockIRepository_CountCard_Call {
+func (_c *MockIRepository_CountCardByUserID_Call) RunAndReturn(run func(ctx context.Context, userID string) (int32, error)) *MockIRepository_CountCardByUserID_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // CreateCard provides a mock function for the type MockIRepository
-func (_mock *MockIRepository) CreateCard(card *model.Card) error {
-	ret := _mock.Called(card)
+func (_mock *MockIRepository) CreateCard(ctx context.Context, card *model.Card) error {
+	ret := _mock.Called(ctx, card)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateCard")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(*model.Card) error); ok {
-		r0 = returnFunc(card)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *model.Card) error); ok {
+		r0 = returnFunc(ctx, card)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -120,19 +171,25 @@ type MockIRepository_CreateCard_Call struct {
 }
 
 // CreateCard is a helper method to define mock.On call
+//   - ctx context.Context
 //   - card *model.Card
-func (_e *MockIRepository_Expecter) CreateCard(card interface{}) *MockIRepository_CreateCard_Call {
-	return &MockIRepository_CreateCard_Call{Call: _e.mock.On("CreateCard", card)}
+func (_e *MockIRepository_Expecter) CreateCard(ctx interface{}, card interface{}) *MockIRepository_CreateCard_Call {
+	return &MockIRepository_CreateCard_Call{Call: _e.mock.On("CreateCard", ctx, card)}
 }
 
-func (_c *MockIRepository_CreateCard_Call) Run(run func(card *model.Card)) *MockIRepository_CreateCard_Call {
+func (_c *MockIRepository_CreateCard_Call) Run(run func(ctx context.Context, card *model.Card)) *MockIRepository_CreateCard_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 *model.Card
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(*model.Card)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *model.Card
+		if args[1] != nil {
+			arg1 = args[1].(*model.Card)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -143,120 +200,206 @@ func (_c *MockIRepository_CreateCard_Call) Return(err error) *MockIRepository_Cr
 	return _c
 }
 
-func (_c *MockIRepository_CreateCard_Call) RunAndReturn(run func(card *model.Card) error) *MockIRepository_CreateCard_Call {
+func (_c *MockIRepository_CreateCard_Call) RunAndReturn(run func(ctx context.Context, card *model.Card) error) *MockIRepository_CreateCard_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// GetCard provides a mock function for the type MockIRepository
-func (_mock *MockIRepository) GetCard(ID string) (*model.Card, error) {
-	ret := _mock.Called(ID)
+// GetCardByID provides a mock function for the type MockIRepository
+func (_mock *MockIRepository) GetCardByID(ctx context.Context, id string) (*model.Card, error) {
+	ret := _mock.Called(ctx, id)
 
 	if len(ret) == 0 {
-		panic("no return value specified for GetCard")
+		panic("no return value specified for GetCardByID")
 	}
 
 	var r0 *model.Card
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string) (*model.Card, error)); ok {
-		return returnFunc(ID)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) (*model.Card, error)); ok {
+		return returnFunc(ctx, id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string) *model.Card); ok {
-		r0 = returnFunc(ID)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) *model.Card); ok {
+		r0 = returnFunc(ctx, id)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.Card)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
-		r1 = returnFunc(ID)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = returnFunc(ctx, id)
 	} else {
 		r1 = ret.Error(1)
 	}
 	return r0, r1
 }
 
-// MockIRepository_GetCard_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetCard'
-type MockIRepository_GetCard_Call struct {
+// MockIRepository_GetCardByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetCardByID'
+type MockIRepository_GetCardByID_Call struct {
 	*mock.Call
 }
 
-// GetCard is a helper method to define mock.On call
-//   - ID string
-func (_e *MockIRepository_Expecter) GetCard(ID interface{}) *MockIRepository_GetCard_Call {
-	return &MockIRepository_GetCard_Call{Call: _e.mock.On("GetCard", ID)}
+// GetCardByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id string
+func (_e *MockIRepository_Expecter) GetCardByID(ctx interface{}, id interface{}) *MockIRepository_GetCardByID_Call {
+	return &MockIRepository_GetCardByID_Call{Call: _e.mock.On("GetCardByID", ctx, id)}
 }
 
-func (_c *MockIRepository_GetCard_Call) Run(run func(ID string)) *MockIRepository_GetCard_Call {
+func (_c *MockIRepository_GetCardByID_Call) Run(run func(ctx context.Context, id string)) *MockIRepository_GetCardByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
 }
 
-func (_c *MockIRepository_GetCard_Call) Return(card *model.Card, err error) *MockIRepository_GetCard_Call {
+func (_c *MockIRepository_GetCardByID_Call) Return(card *model.Card, err error) *MockIRepository_GetCardByID_Call {
 	_c.Call.Return(card, err)
 	return _c
 }
 
-func (_c *MockIRepository_GetCard_Call) RunAndReturn(run func(ID string) (*model.Card, error)) *MockIRepository_GetCard_Call {
+func (_c *MockIRepository_GetCardByID_Call) RunAndReturn(run func(ctx context.Context, id string) (*model.Card, error)) *MockIRepository_GetCardByID_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// UpdateCard provides a mock function for the type MockIRepository
-func (_mock *MockIRepository) UpdateCard(card *model.Card) error {
-	ret := _mock.Called(card)
+// GetCardByUserID provides a mock function for the type MockIRepository
+func (_mock *MockIRepository) GetCardByUserID(ctx context.Context, userID string) (*model.Card, error) {
+	ret := _mock.Called(ctx, userID)
 
 	if len(ret) == 0 {
-		panic("no return value specified for UpdateCard")
+		panic("no return value specified for GetCardByUserID")
+	}
+
+	var r0 *model.Card
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) (*model.Card, error)); ok {
+		return returnFunc(ctx, userID)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) *model.Card); ok {
+		r0 = returnFunc(ctx, userID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.Card)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = returnFunc(ctx, userID)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockIRepository_GetCardByUserID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetCardByUserID'
+type MockIRepository_GetCardByUserID_Call struct {
+	*mock.Call
+}
+
+// GetCardByUserID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userID string
+func (_e *MockIRepository_Expecter) GetCardByUserID(ctx interface{}, userID interface{}) *MockIRepository_GetCardByUserID_Call {
+	return &MockIRepository_GetCardByUserID_Call{Call: _e.mock.On("GetCardByUserID", ctx, userID)}
+}
+
+func (_c *MockIRepository_GetCardByUserID_Call) Run(run func(ctx context.Context, userID string)) *MockIRepository_GetCardByUserID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIRepository_GetCardByUserID_Call) Return(card *model.Card, err error) *MockIRepository_GetCardByUserID_Call {
+	_c.Call.Return(card, err)
+	return _c
+}
+
+func (_c *MockIRepository_GetCardByUserID_Call) RunAndReturn(run func(ctx context.Context, userID string) (*model.Card, error)) *MockIRepository_GetCardByUserID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateCardStatus provides a mock function for the type MockIRepository
+func (_mock *MockIRepository) UpdateCardStatus(ctx context.Context, id string, status model.Status) error {
+	ret := _mock.Called(ctx, id, status)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateCardStatus")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(*model.Card) error); ok {
-		r0 = returnFunc(card)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, model.Status) error); ok {
+		r0 = returnFunc(ctx, id, status)
 	} else {
 		r0 = ret.Error(0)
 	}
 	return r0
 }
 
-// MockIRepository_UpdateCard_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateCard'
-type MockIRepository_UpdateCard_Call struct {
+// MockIRepository_UpdateCardStatus_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateCardStatus'
+type MockIRepository_UpdateCardStatus_Call struct {
 	*mock.Call
 }
 
-// UpdateCard is a helper method to define mock.On call
-//   - card *model.Card
-func (_e *MockIRepository_Expecter) UpdateCard(card interface{}) *MockIRepository_UpdateCard_Call {
-	return &MockIRepository_UpdateCard_Call{Call: _e.mock.On("UpdateCard", card)}
+// UpdateCardStatus is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id string
+//   - status model.Status
+func (_e *MockIRepository_Expecter) UpdateCardStatus(ctx interface{}, id interface{}, status interface{}) *MockIRepository_UpdateCardStatus_Call {
+	return &MockIRepository_UpdateCardStatus_Call{Call: _e.mock.On("UpdateCardStatus", ctx, id, status)}
 }
 
-func (_c *MockIRepository_UpdateCard_Call) Run(run func(card *model.Card)) *MockIRepository_UpdateCard_Call {
+func (_c *MockIRepository_UpdateCardStatus_Call) Run(run func(ctx context.Context, id string, status model.Status)) *MockIRepository_UpdateCardStatus_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 *model.Card
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(*model.Card)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 model.Status
+		if args[2] != nil {
+			arg2 = args[2].(model.Status)
 		}
 		run(
 			arg0,
+			arg1,
+			arg2,
 		)
 	})
 	return _c
 }
 
-func (_c *MockIRepository_UpdateCard_Call) Return(err error) *MockIRepository_UpdateCard_Call {
+func (_c *MockIRepository_UpdateCardStatus_Call) Return(err error) *MockIRepository_UpdateCardStatus_Call {
 	_c.Call.Return(err)
 	return _c
 }
 
-func (_c *MockIRepository_UpdateCard_Call) RunAndReturn(run func(card *model.Card) error) *MockIRepository_UpdateCard_Call {
+func (_c *MockIRepository_UpdateCardStatus_Call) RunAndReturn(run func(ctx context.Context, id string, status model.Status) error) *MockIRepository_UpdateCardStatus_Call {
 	_c.Call.Return(run)
 	return _c
 }

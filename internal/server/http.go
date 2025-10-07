@@ -13,7 +13,7 @@ func NewRouter(cardSvc *service.CardService) *gin.Engine {
 	r.Use(gin.Logger(), gin.Recovery())
 
 	r.GET("/health", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+		c.JSON(http.StatusOK, gin.H{"message": "ok"})
 	})
 
 	cardHdl := handler.NewCardHandler(cardSvc)

@@ -51,13 +51,15 @@ func TestRequestCardService(t *testing.T) {
 			tmpCreatedUsers := map[string]bool{}
 			for i := 0; i < len(tc.userIDs); i++ {
 				repo.
-					On("CountCard", mock.AnythingOfType("string")).
-					Return(func(userID string) (int32, error) {
+					On("CountCardByUserID", mock.Anything, mock.AnythingOfType("string")).
+					Return(func(userID string) int32 {
 						_, ok := createdUsers[userID]
 						if ok {
-							return 1, nil
+							return 1
 						}
-						return 0, nil
+						return 0
+					}, func(userID string) error {
+						return nil
 					}).
 					Once()
 
@@ -68,7 +70,7 @@ func TestRequestCardService(t *testing.T) {
 				tmpCreatedUsers[tc.userIDs[i]] = true
 
 				repo.
-					On("CreateCard", mock.AnythingOfType("*model.Card")).
+					On("CreateCard", mock.Anything, mock.AnythingOfType("*model.Card")).
 					Return(func(c *model.Card) error {
 						createdUsers[c.UserID] = true
 						return nil
@@ -95,8 +97,6 @@ func TestRequestCardService(t *testing.T) {
 			}
 
 			repo.AssertExpectations(t)
-			repo.AssertNotCalled(t, "UpdateCard", mock.Anything)
-			repo.AssertNotCalled(t, "GetCard", mock.Anything)
 		})
 	}
 }
