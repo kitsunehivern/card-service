@@ -1,8 +1,8 @@
 package mock
 
 import (
+	mockrepo "card-service/gen/mock/repo"
 	cardpb "card-service/gen/proto"
-	mockrepo "card-service/gen/repo"
 	"card-service/internal/adapter"
 	"card-service/internal/errmsg"
 	"card-service/internal/model"
@@ -15,8 +15,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func newServiceWithMock(t *testing.T) (*service.CardService, *mockrepo.IRepository) {
-	repo := mockrepo.NewIRepository(t)
+func newServiceWithMock(t *testing.T) (*service.CardService, *mockrepo.MockIRepository) {
+	repo := mockrepo.NewMockIRepository(t)
 	svc := service.NewCardService(repo)
 	return svc, repo
 }
@@ -51,12 +51,13 @@ func TestRequestCard(t *testing.T) {
 			tmpCreatedUsers := map[string]bool{}
 			for i := 0; i < len(tc.userIDs); i++ {
 				repo.
-					On("HasCreatedCard", mock.AnythingOfType("string")).
-					Return(func(userID string) bool {
-						_, created := createdUsers[userID]
-						return created
-					}, func(userID string) error {
-						return nil
+					On("CountCard", mock.AnythingOfType("string")).
+					Return(func(userID string) (int32, error) {
+						_, ok := createdUsers[userID]
+						if ok {
+							return 1, nil
+						}
+						return 0, nil
 					}).
 					Once()
 

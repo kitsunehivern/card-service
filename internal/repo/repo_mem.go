@@ -29,13 +29,15 @@ func (repo *memRepo) CreateCard(card *model.Card) error {
 	return nil
 }
 
-func (repo *memRepo) HasCreatedCard(userID string) (bool, error) {
+func (repo *memRepo) CountCard(userID string) (int32, error) {
 	repo.mutex.Lock()
 	defer repo.mutex.Unlock()
 
 	_, ok := repo.createdUsers[userID]
-
-	return ok, nil
+	if ok {
+		return 1, nil
+	}
+	return 0, nil
 }
 
 func (repo *memRepo) GetCard(id string) (*model.Card, error) {

@@ -18,12 +18,12 @@ func NewCardService(r repo.IRepository) *CardService {
 }
 
 func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardRequest) (*cardpb.RequestCardResponse, error) {
-	created, err := cs.repo.HasCreatedCard(req.GetUserId())
+	count, err := cs.repo.CountCard(req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
 
-	if created {
+	if count > 0 {
 		return nil, errmsg.CardAlreadyExists
 	}
 
