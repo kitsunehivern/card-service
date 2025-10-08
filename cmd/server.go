@@ -44,16 +44,23 @@ var serverCmd = &cobra.Command{
 		}
 
 		cardSvc := service.NewCardService(repo)
-		router := server.NewRouter(cardSvc)
+		httpRouter := server.NewHTTPRouter(cardSvc)
 		srv := &http.Server{
 			Addr:    fmt.Sprintf("%s:%d", cfg.Http.Host, cfg.Http.Port),
-			Handler: router,
+			Handler: httpRouter,
 		}
 
 		errCh := make(chan error, 1)
 		go func() {
 			log.Printf("HTTP server listening on %s:%d", cfg.Http.Host, cfg.Http.Port)
 			errCh <- srv.ListenAndServe()
+		}()
+
+		go func() {
+			log.Printf("gRPC server listening on %s:%d", cfg.Grpc.Host, cfg.Grpc.Port)
+			if err := server.NewGRPCRouter(cardSvc, fmt.Sprintf("%s:%d", cfg.Grpc.Host, cfg.Grpc.Port)); err != nil {
+				fmt.Printf("gRPC server error %v\n", err)
+			}
 		}()
 
 		quit := make(chan os.Signal, 1)

@@ -6,10 +6,16 @@ import (
 
 type Config struct {
 	Http HttpConfig     `yaml:"http"`
+	Grpc GrpcConfig     `yaml:"grpc"`
 	Psql PostgresConfig `yaml:"psql"`
 }
 
 type HttpConfig struct {
+	Host string `yaml:"host"`
+	Port int    `yaml:"port"`
+}
+
+type GrpcConfig struct {
 	Host string `yaml:"host"`
 	Port int    `yaml:"port"`
 }

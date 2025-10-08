@@ -1,7 +1,7 @@
-http-mem:
+run-mem:
 	go run . server memory
 
-http-psql:
+run-psql:
 	go run . server postgres
 
 test:
@@ -11,7 +11,7 @@ mockgen:
 	mockery
 
 protogen:
-	 protoc --go_out=gen --go_opt=paths=source_relative --go-grpc_out=gen --go-grpc_opt=paths=source_relative proto/card.proto
+	mkdir -p gen/proto && protoc -I internal/proto --go_out=gen/proto --go_opt=paths=source_relative --go-grpc_out=gen/proto --go-grpc_opt=paths=source_relative --validate_out=lang=go:gen/proto card.proto
 
 docker:
 	docker run --name carddb \

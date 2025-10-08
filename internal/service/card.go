@@ -10,12 +10,15 @@ import (
 )
 
 type CardService struct {
+	cardpb.UnimplementedCardServiceServer
 	repo repo.IRepository
 }
 
 func NewCardService(r repo.IRepository) *CardService {
 	return &CardService{repo: r}
 }
+
+func (cs *CardService) mustEmbedUnimplementedCardServiceServer() {}
 
 func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardRequest) (*cardpb.RequestCardResponse, error) {
 	count, err := cs.repo.CountCardByUserID(ctx, req.GetUserId())
@@ -25,6 +28,10 @@ func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardR
 
 	if count > 0 {
 		return nil, errmsg.CardAlreadyExists
+	}
+
+	if req.GetUserId() == "" {
+		return nil, errmsg.CardMissingFieldInBody
 	}
 
 	card := model.New(req.GetUserId())

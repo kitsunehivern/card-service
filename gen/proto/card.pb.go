@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.9
 // 	protoc        v6.32.1
-// source: proto/card.proto
+// source: card.proto
 
 package cardpb
 
@@ -35,7 +35,7 @@ type Card struct {
 
 func (x *Card) Reset() {
 	*x = Card{}
-	mi := &file_proto_card_proto_msgTypes[0]
+	mi := &file_card_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -47,7 +47,7 @@ func (x *Card) String() string {
 func (*Card) ProtoMessage() {}
 
 func (x *Card) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[0]
+	mi := &file_card_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -60,7 +60,7 @@ func (x *Card) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Card.ProtoReflect.Descriptor instead.
 func (*Card) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{0}
+	return file_card_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Card) GetId() string {
@@ -114,7 +114,7 @@ type RequestCardRequest struct {
 
 func (x *RequestCardRequest) Reset() {
 	*x = RequestCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[1]
+	mi := &file_card_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -126,7 +126,7 @@ func (x *RequestCardRequest) String() string {
 func (*RequestCardRequest) ProtoMessage() {}
 
 func (x *RequestCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[1]
+	mi := &file_card_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -139,7 +139,7 @@ func (x *RequestCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RequestCardRequest.ProtoReflect.Descriptor instead.
 func (*RequestCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{1}
+	return file_card_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *RequestCardRequest) GetUserId() string {
@@ -158,7 +158,7 @@ type RequestCardResponse struct {
 
 func (x *RequestCardResponse) Reset() {
 	*x = RequestCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[2]
+	mi := &file_card_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -170,7 +170,7 @@ func (x *RequestCardResponse) String() string {
 func (*RequestCardResponse) ProtoMessage() {}
 
 func (x *RequestCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[2]
+	mi := &file_card_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -183,7 +183,7 @@ func (x *RequestCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RequestCardResponse.ProtoReflect.Descriptor instead.
 func (*RequestCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{2}
+	return file_card_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *RequestCardResponse) GetCard() *Card {
@@ -202,7 +202,7 @@ type ActivateCardRequest struct {
 
 func (x *ActivateCardRequest) Reset() {
 	*x = ActivateCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[3]
+	mi := &file_card_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -214,7 +214,7 @@ func (x *ActivateCardRequest) String() string {
 func (*ActivateCardRequest) ProtoMessage() {}
 
 func (x *ActivateCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[3]
+	mi := &file_card_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -227,7 +227,7 @@ func (x *ActivateCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActivateCardRequest.ProtoReflect.Descriptor instead.
 func (*ActivateCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{3}
+	return file_card_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ActivateCardRequest) GetId() string {
@@ -246,7 +246,7 @@ type ActivateCardResponse struct {
 
 func (x *ActivateCardResponse) Reset() {
 	*x = ActivateCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[4]
+	mi := &file_card_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -258,7 +258,7 @@ func (x *ActivateCardResponse) String() string {
 func (*ActivateCardResponse) ProtoMessage() {}
 
 func (x *ActivateCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[4]
+	mi := &file_card_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -271,7 +271,7 @@ func (x *ActivateCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActivateCardResponse.ProtoReflect.Descriptor instead.
 func (*ActivateCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{4}
+	return file_card_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ActivateCardResponse) GetCard() *Card {
@@ -290,7 +290,7 @@ type BlockCardRequest struct {
 
 func (x *BlockCardRequest) Reset() {
 	*x = BlockCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[5]
+	mi := &file_card_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -302,7 +302,7 @@ func (x *BlockCardRequest) String() string {
 func (*BlockCardRequest) ProtoMessage() {}
 
 func (x *BlockCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[5]
+	mi := &file_card_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -315,7 +315,7 @@ func (x *BlockCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlockCardRequest.ProtoReflect.Descriptor instead.
 func (*BlockCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{5}
+	return file_card_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *BlockCardRequest) GetId() string {
@@ -334,7 +334,7 @@ type BlockCardResponse struct {
 
 func (x *BlockCardResponse) Reset() {
 	*x = BlockCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[6]
+	mi := &file_card_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -346,7 +346,7 @@ func (x *BlockCardResponse) String() string {
 func (*BlockCardResponse) ProtoMessage() {}
 
 func (x *BlockCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[6]
+	mi := &file_card_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -359,7 +359,7 @@ func (x *BlockCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlockCardResponse.ProtoReflect.Descriptor instead.
 func (*BlockCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{6}
+	return file_card_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *BlockCardResponse) GetCard() *Card {
@@ -378,7 +378,7 @@ type UnblockCardRequest struct {
 
 func (x *UnblockCardRequest) Reset() {
 	*x = UnblockCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[7]
+	mi := &file_card_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -390,7 +390,7 @@ func (x *UnblockCardRequest) String() string {
 func (*UnblockCardRequest) ProtoMessage() {}
 
 func (x *UnblockCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[7]
+	mi := &file_card_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -403,7 +403,7 @@ func (x *UnblockCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnblockCardRequest.ProtoReflect.Descriptor instead.
 func (*UnblockCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{7}
+	return file_card_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UnblockCardRequest) GetId() string {
@@ -422,7 +422,7 @@ type UnblockCardResponse struct {
 
 func (x *UnblockCardResponse) Reset() {
 	*x = UnblockCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[8]
+	mi := &file_card_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -434,7 +434,7 @@ func (x *UnblockCardResponse) String() string {
 func (*UnblockCardResponse) ProtoMessage() {}
 
 func (x *UnblockCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[8]
+	mi := &file_card_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -447,7 +447,7 @@ func (x *UnblockCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnblockCardResponse.ProtoReflect.Descriptor instead.
 func (*UnblockCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{8}
+	return file_card_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *UnblockCardResponse) GetCard() *Card {
@@ -466,7 +466,7 @@ type RetireCardRequest struct {
 
 func (x *RetireCardRequest) Reset() {
 	*x = RetireCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[9]
+	mi := &file_card_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -478,7 +478,7 @@ func (x *RetireCardRequest) String() string {
 func (*RetireCardRequest) ProtoMessage() {}
 
 func (x *RetireCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[9]
+	mi := &file_card_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -491,7 +491,7 @@ func (x *RetireCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RetireCardRequest.ProtoReflect.Descriptor instead.
 func (*RetireCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{9}
+	return file_card_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *RetireCardRequest) GetId() string {
@@ -510,7 +510,7 @@ type RetireCardResponse struct {
 
 func (x *RetireCardResponse) Reset() {
 	*x = RetireCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[10]
+	mi := &file_card_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -522,7 +522,7 @@ func (x *RetireCardResponse) String() string {
 func (*RetireCardResponse) ProtoMessage() {}
 
 func (x *RetireCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[10]
+	mi := &file_card_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -535,7 +535,7 @@ func (x *RetireCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RetireCardResponse.ProtoReflect.Descriptor instead.
 func (*RetireCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{10}
+	return file_card_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *RetireCardResponse) GetCard() *Card {
@@ -554,7 +554,7 @@ type CloseCardRequest struct {
 
 func (x *CloseCardRequest) Reset() {
 	*x = CloseCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[11]
+	mi := &file_card_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -566,7 +566,7 @@ func (x *CloseCardRequest) String() string {
 func (*CloseCardRequest) ProtoMessage() {}
 
 func (x *CloseCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[11]
+	mi := &file_card_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -579,7 +579,7 @@ func (x *CloseCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CloseCardRequest.ProtoReflect.Descriptor instead.
 func (*CloseCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{11}
+	return file_card_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *CloseCardRequest) GetId() string {
@@ -598,7 +598,7 @@ type CloseCardResponse struct {
 
 func (x *CloseCardResponse) Reset() {
 	*x = CloseCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[12]
+	mi := &file_card_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -610,7 +610,7 @@ func (x *CloseCardResponse) String() string {
 func (*CloseCardResponse) ProtoMessage() {}
 
 func (x *CloseCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[12]
+	mi := &file_card_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -623,7 +623,7 @@ func (x *CloseCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CloseCardResponse.ProtoReflect.Descriptor instead.
 func (*CloseCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{12}
+	return file_card_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *CloseCardResponse) GetCard() *Card {
@@ -642,7 +642,7 @@ type GetCardRequest struct {
 
 func (x *GetCardRequest) Reset() {
 	*x = GetCardRequest{}
-	mi := &file_proto_card_proto_msgTypes[13]
+	mi := &file_card_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -654,7 +654,7 @@ func (x *GetCardRequest) String() string {
 func (*GetCardRequest) ProtoMessage() {}
 
 func (x *GetCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[13]
+	mi := &file_card_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -667,7 +667,7 @@ func (x *GetCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCardRequest.ProtoReflect.Descriptor instead.
 func (*GetCardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{13}
+	return file_card_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *GetCardRequest) GetId() string {
@@ -686,7 +686,7 @@ type GetCardResponse struct {
 
 func (x *GetCardResponse) Reset() {
 	*x = GetCardResponse{}
-	mi := &file_proto_card_proto_msgTypes[14]
+	mi := &file_card_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -698,7 +698,7 @@ func (x *GetCardResponse) String() string {
 func (*GetCardResponse) ProtoMessage() {}
 
 func (x *GetCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_card_proto_msgTypes[14]
+	mi := &file_card_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -711,7 +711,7 @@ func (x *GetCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCardResponse.ProtoReflect.Descriptor instead.
 func (*GetCardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_card_proto_rawDescGZIP(), []int{14}
+	return file_card_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetCardResponse) GetCard() *Card {
@@ -721,11 +721,12 @@ func (x *GetCardResponse) GetCard() *Card {
 	return nil
 }
 
-var File_proto_card_proto protoreflect.FileDescriptor
+var File_card_proto protoreflect.FileDescriptor
 
-const file_proto_card_proto_rawDesc = "" +
+const file_card_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/card.proto\x12\x04main\"\x94\x01\n" +
+	"\n" +
+	"card.proto\x12\x04main\"\x94\x01\n" +
 	"\x04Card\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x14\n" +
@@ -780,19 +781,19 @@ const file_proto_card_proto_rawDesc = "" +
 	"\aGetCard\x12\x14.main.GetCardRequest\x1a\x15.main.GetCardResponseB\"Z model-service/proto/model;cardpbb\x06proto3"
 
 var (
-	file_proto_card_proto_rawDescOnce sync.Once
-	file_proto_card_proto_rawDescData []byte
+	file_card_proto_rawDescOnce sync.Once
+	file_card_proto_rawDescData []byte
 )
 
-func file_proto_card_proto_rawDescGZIP() []byte {
-	file_proto_card_proto_rawDescOnce.Do(func() {
-		file_proto_card_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_card_proto_rawDesc), len(file_proto_card_proto_rawDesc)))
+func file_card_proto_rawDescGZIP() []byte {
+	file_card_proto_rawDescOnce.Do(func() {
+		file_card_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_card_proto_rawDesc), len(file_card_proto_rawDesc)))
 	})
-	return file_proto_card_proto_rawDescData
+	return file_card_proto_rawDescData
 }
 
-var file_proto_card_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
-var file_proto_card_proto_goTypes = []any{
+var file_card_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_card_proto_goTypes = []any{
 	(*Card)(nil),                 // 0: main.Card
 	(*RequestCardRequest)(nil),   // 1: main.RequestCardRequest
 	(*RequestCardResponse)(nil),  // 2: main.RequestCardResponse
@@ -809,7 +810,7 @@ var file_proto_card_proto_goTypes = []any{
 	(*GetCardRequest)(nil),       // 13: main.GetCardRequest
 	(*GetCardResponse)(nil),      // 14: main.GetCardResponse
 }
-var file_proto_card_proto_depIdxs = []int32{
+var file_card_proto_depIdxs = []int32{
 	0,  // 0: main.RequestCardResponse.card:type_name -> main.Card
 	0,  // 1: main.ActivateCardResponse.card:type_name -> main.Card
 	0,  // 2: main.BlockCardResponse.card:type_name -> main.Card
@@ -838,26 +839,26 @@ var file_proto_card_proto_depIdxs = []int32{
 	0,  // [0:7] is the sub-list for field type_name
 }
 
-func init() { file_proto_card_proto_init() }
-func file_proto_card_proto_init() {
-	if File_proto_card_proto != nil {
+func init() { file_card_proto_init() }
+func file_card_proto_init() {
+	if File_card_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_card_proto_rawDesc), len(file_proto_card_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_card_proto_rawDesc), len(file_card_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_proto_card_proto_goTypes,
-		DependencyIndexes: file_proto_card_proto_depIdxs,
-		MessageInfos:      file_proto_card_proto_msgTypes,
+		GoTypes:           file_card_proto_goTypes,
+		DependencyIndexes: file_card_proto_depIdxs,
+		MessageInfos:      file_card_proto_msgTypes,
 	}.Build()
-	File_proto_card_proto = out.File
-	file_proto_card_proto_goTypes = nil
-	file_proto_card_proto_depIdxs = nil
+	File_card_proto = out.File
+	file_card_proto_goTypes = nil
+	file_card_proto_depIdxs = nil
 }
