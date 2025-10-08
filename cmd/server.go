@@ -19,18 +19,40 @@ import (
 var serverCmd = &cobra.Command{
 	Use:   "server",
 	Short: "Start Server",
+	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		repo := repo2.NewMemRepo()
+		var repo repo2.IRepository
+		var err error
+		switch args[0] {
+		case "memory":
+			repo, err = repo2.NewMemRepo(context.Background())
+		case "postgres":
+			dsn := fmt.Sprintf("postgres://%v:%v@%v:%v/%v?sslmode=disable",
+				cfg.Psql.Username,
+				cfg.Psql.Password,
+				cfg.Psql.Host,
+				cfg.Psql.Port,
+				cfg.Psql.Database,
+			)
+			repo, err = repo2.NewPsqlRepo(context.Background(), dsn)
+		default:
+			panic(fmt.Sprintf("unexpected %v database", args[0]))
+		}
+
+		if err != nil {
+			return err
+		}
+
 		cardSvc := service.NewCardService(repo)
 		router := server.NewRouter(cardSvc)
 		srv := &http.Server{
-			Addr:    fmt.Sprintf("%s:%d", cfg.HTTP.Host, cfg.HTTP.Port),
+			Addr:    fmt.Sprintf("%s:%d", cfg.Http.Host, cfg.Http.Port),
 			Handler: router,
 		}
 
 		errCh := make(chan error, 1)
 		go func() {
-			log.Printf("HTTP server listening on %s:%d", cfg.HTTP.Host, cfg.HTTP.Port)
+			log.Printf("HTTP server listening on %s:%d", cfg.Http.Host, cfg.Http.Port)
 			errCh <- srv.ListenAndServe()
 		}()
 

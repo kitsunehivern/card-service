@@ -2,6 +2,7 @@ package handler
 
 import (
 	cardpb "card-service/gen/proto"
+	"card-service/internal/errmsg"
 	"card-service/internal/service"
 	"net/http"
 
@@ -20,10 +21,30 @@ type RequestCardBody struct {
 	UserID string `json:"user_id" binding:"required"`
 }
 
+type ActivateCardBody struct {
+	ID string `json:"id" binding:"required"`
+}
+
+type BlockCardBody struct {
+	ID string `json:"id" binding:"required"`
+}
+
+type UnblockCardBody struct {
+	ID string `json:"id" binding:"required"`
+}
+
+type RetireCardBody struct {
+	ID string `json:"id" binding:"required"`
+}
+
+type CloseCardBody struct {
+	ID string `json:"id" binding:"required"`
+}
+
 func (ch *CardHandler) RequestCard(c *gin.Context) {
 	var body RequestCardBody
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": errmsg.CardMissingFieldInBody})
 		return
 	}
 
@@ -39,8 +60,13 @@ func (ch *CardHandler) RequestCard(c *gin.Context) {
 }
 
 func (ch *CardHandler) ActivateCard(c *gin.Context) {
-	id := c.Param("id")
-	req := &cardpb.ActivateCardRequest{Id: id}
+	var body ActivateCardBody
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": errmsg.CardMissingFieldInBody})
+		return
+	}
+
+	req := &cardpb.ActivateCardRequest{Id: body.ID}
 
 	resp, err := ch.cardSvc.ActivateCard(c.Request.Context(), req)
 	if err != nil {
@@ -52,8 +78,13 @@ func (ch *CardHandler) ActivateCard(c *gin.Context) {
 }
 
 func (ch *CardHandler) BlockCard(c *gin.Context) {
-	id := c.Param("id")
-	req := &cardpb.BlockCardRequest{Id: id}
+	var body BlockCardBody
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": errmsg.CardMissingFieldInBody})
+		return
+	}
+
+	req := &cardpb.BlockCardRequest{Id: body.ID}
 
 	resp, err := ch.cardSvc.BlockCard(c.Request.Context(), req)
 	if err != nil {
@@ -65,8 +96,13 @@ func (ch *CardHandler) BlockCard(c *gin.Context) {
 }
 
 func (ch *CardHandler) UnblockCard(c *gin.Context) {
-	id := c.Param("id")
-	req := &cardpb.UnblockCardRequest{Id: id}
+	var body UnblockCardBody
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": errmsg.CardMissingFieldInBody})
+		return
+	}
+
+	req := &cardpb.UnblockCardRequest{Id: body.ID}
 
 	resp, err := ch.cardSvc.UnblockCard(c.Request.Context(), req)
 	if err != nil {
@@ -77,24 +113,34 @@ func (ch *CardHandler) UnblockCard(c *gin.Context) {
 	c.JSON(http.StatusOK, resp.GetCard())
 }
 
-func (ch *CardHandler) CloseCard(c *gin.Context) {
-	id := c.Param("id")
-	req := &cardpb.CloseCardRequest{Id: id}
+func (ch *CardHandler) RetireCard(c *gin.Context) {
+	var body RetireCardBody
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": errmsg.CardMissingFieldInBody})
+		return
+	}
 
-	resp, err := ch.cardSvc.CloseCard(c.Request.Context(), req)
+	req := &cardpb.RetireCardRequest{Id: body.ID}
+
+	resp, err := ch.cardSvc.RetireCard(c.Request.Context(), req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": errmsg.CardMissingFieldInBody})
 		return
 	}
 
 	c.JSON(http.StatusOK, resp.GetCard())
 }
 
-func (ch *CardHandler) RetireCard(c *gin.Context) {
-	id := c.Param("id")
-	req := &cardpb.RetireCardRequest{Id: id}
+func (ch *CardHandler) CloseCard(c *gin.Context) {
+	var body CloseCardBody
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": errmsg.CardMissingFieldInBody})
+		return
+	}
 
-	resp, err := ch.cardSvc.RetireCard(c.Request.Context(), req)
+	req := &cardpb.CloseCardRequest{Id: body.ID}
+
+	resp, err := ch.cardSvc.CloseCard(c.Request.Context(), req)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return

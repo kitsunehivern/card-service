@@ -5,10 +5,21 @@ import (
 )
 
 type Config struct {
-	HTTP struct {
-		Host string
-		Port int
-	}
+	Http HttpConfig     `yaml:"http"`
+	Psql PostgresConfig `yaml:"psql"`
+}
+
+type HttpConfig struct {
+	Host string `yaml:"host"`
+	Port int    `yaml:"port"`
+}
+
+type PostgresConfig struct {
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	Database string `yaml:"database"`
 }
 
 func LoadConfig() (*Config, error) {
@@ -24,5 +35,6 @@ func LoadConfig() (*Config, error) {
 	if err := viper.Unmarshal(&c); err != nil {
 		return nil, err
 	}
+
 	return &c, nil
 }

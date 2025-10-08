@@ -8,10 +8,10 @@
 *.so
 *.dylib
 
-# Test binary, built with `go mock -c`
+# Test binary, built with `go test -c`
 *.test
 
-# Code coverage profiles and other mock artifacts
+# Code coverage profiles and other test artifacts
 *.out
 coverage.*
 *.coverprofile
@@ -28,5 +28,5 @@ go.work.sum
 .env
 
 # Editor/IDE
-# .idea/
+.idea/
 # .vscode/

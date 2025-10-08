@@ -18,7 +18,7 @@ func NewCardService(r repo.IRepository) *CardService {
 }
 
 func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardRequest) (*cardpb.RequestCardResponse, error) {
-	count, err := cs.repo.CountCard(req.GetUserId())
+	count, err := cs.repo.CountCardByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +28,7 @@ func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardR
 	}
 
 	card := model.New(req.GetUserId())
-	if err := cs.repo.CreateCard(card); err != nil {
+	if err := cs.repo.CreateCard(ctx, card); err != nil {
 		return nil, err
 	}
 
@@ -36,7 +36,7 @@ func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardR
 }
 
 func (cs *CardService) mutateCard(ctx context.Context, id string, event model.Event) (*model.Card, error) {
-	card, err := cs.repo.GetCard(id)
+	card, err := cs.repo.GetCardByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func (cs *CardService) mutateCard(ctx context.Context, id string, event model.Ev
 		return nil, err
 	}
 
-	if err := cs.repo.UpdateCard(card); err != nil {
+	if err := cs.repo.UpdateCardStatus(ctx, id, card.Status); err != nil {
 		return nil, err
 	}
 
@@ -95,7 +95,7 @@ func (cs *CardService) CloseCard(ctx context.Context, req *cardpb.CloseCardReque
 }
 
 func (cs *CardService) GetCard(ctx context.Context, req *cardpb.GetCardRequest) (*cardpb.GetCardResponse, error) {
-	c, err := cs.repo.GetCard(req.GetId())
+	c, err := cs.repo.GetCardByID(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
