@@ -38,67 +38,23 @@ func (_m *MockIRepository) EXPECT() *MockIRepository_Expecter {
 	return &MockIRepository_Expecter{mock: &_m.Mock}
 }
 
-// Close provides a mock function for the type MockIRepository
-func (_mock *MockIRepository) Close() error {
-	ret := _mock.Called()
-
-	if len(ret) == 0 {
-		panic("no return value specified for Close")
-	}
-
-	var r0 error
-	if returnFunc, ok := ret.Get(0).(func() error); ok {
-		r0 = returnFunc()
-	} else {
-		r0 = ret.Error(0)
-	}
-	return r0
-}
-
-// MockIRepository_Close_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Close'
-type MockIRepository_Close_Call struct {
-	*mock.Call
-}
-
-// Close is a helper method to define mock.On call
-func (_e *MockIRepository_Expecter) Close() *MockIRepository_Close_Call {
-	return &MockIRepository_Close_Call{Call: _e.mock.On("Close")}
-}
-
-func (_c *MockIRepository_Close_Call) Run(run func()) *MockIRepository_Close_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run()
-	})
-	return _c
-}
-
-func (_c *MockIRepository_Close_Call) Return(err error) *MockIRepository_Close_Call {
-	_c.Call.Return(err)
-	return _c
-}
-
-func (_c *MockIRepository_Close_Call) RunAndReturn(run func() error) *MockIRepository_Close_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
 // CountCardByUserID provides a mock function for the type MockIRepository
-func (_mock *MockIRepository) CountCardByUserID(ctx context.Context, userID string) (int32, error) {
+func (_mock *MockIRepository) CountCardByUserID(ctx context.Context, userID string) (int, error) {
 	ret := _mock.Called(ctx, userID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CountCardByUserID")
 	}
 
-	var r0 int32
+	var r0 int
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string) (int32, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) (int, error)); ok {
 		return returnFunc(ctx, userID)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string) int32); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) int); ok {
 		r0 = returnFunc(ctx, userID)
 	} else {
-		r0 = ret.Get(0).(int32)
+		r0 = ret.Get(0).(int)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context, string) error); ok {
 		r1 = returnFunc(ctx, userID)
@@ -138,12 +94,12 @@ func (_c *MockIRepository_CountCardByUserID_Call) Run(run func(ctx context.Conte
 	return _c
 }
 
-func (_c *MockIRepository_CountCardByUserID_Call) Return(n int32, err error) *MockIRepository_CountCardByUserID_Call {
+func (_c *MockIRepository_CountCardByUserID_Call) Return(n int, err error) *MockIRepository_CountCardByUserID_Call {
 	_c.Call.Return(n, err)
 	return _c
 }
 
-func (_c *MockIRepository_CountCardByUserID_Call) RunAndReturn(run func(ctx context.Context, userID string) (int32, error)) *MockIRepository_CountCardByUserID_Call {
+func (_c *MockIRepository_CountCardByUserID_Call) RunAndReturn(run func(ctx context.Context, userID string) (int, error)) *MockIRepository_CountCardByUserID_Call {
 	_c.Call.Return(run)
 	return _c
 }

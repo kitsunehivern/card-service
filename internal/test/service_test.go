@@ -1,4 +1,4 @@
-package mock
+package test
 
 import (
 	"card-service/gen/mock/repo"
@@ -52,14 +52,12 @@ func TestRequestCardService(t *testing.T) {
 			for i := 0; i < len(tc.userIDs); i++ {
 				repo.
 					On("CountCardByUserID", mock.Anything, mock.AnythingOfType("string")).
-					Return(func(userID string) int32 {
+					Return(func(ctx context.Context, userID string) (int, error) {
 						_, ok := createdUsers[userID]
 						if ok {
-							return 1
+							return 1, nil
 						}
-						return 0
-					}, func(userID string) error {
-						return nil
+						return 0, nil
 					}).
 					Once()
 
@@ -71,7 +69,7 @@ func TestRequestCardService(t *testing.T) {
 
 				repo.
 					On("CreateCard", mock.Anything, mock.AnythingOfType("*model.Card")).
-					Return(func(c *model.Card) error {
+					Return(func(ctx context.Context, c *model.Card) error {
 						createdUsers[c.UserID] = true
 						return nil
 					}).Once()

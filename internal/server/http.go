@@ -18,12 +18,12 @@ func NewRouter(cardSvc *service.CardService) *gin.Engine {
 
 	cardHdl := handler.NewCardHandler(cardSvc)
 	r.POST("/card/request", cardHdl.RequestCard)
-	r.GET("/card/:id", cardHdl.GetCard)
-	r.POST("/card/:id/activate", cardHdl.ActivateCard)
-	r.POST("/card/:id/block", cardHdl.BlockCard)
-	r.POST("/card/:id/unblock", cardHdl.UnblockCard)
-	r.POST("/card/:id/retire", cardHdl.RetireCard)
-	r.POST("/card/:id/close", cardHdl.CloseCard)
+	r.GET("/card/get/:id", cardHdl.GetCard)
+	r.POST("/card/activate", cardHdl.ActivateCard)
+	r.POST("/card/block", cardHdl.BlockCard)
+	r.POST("/card/unblock", cardHdl.UnblockCard)
+	r.POST("/card/retire", cardHdl.RetireCard)
+	r.POST("/card/close", cardHdl.CloseCard)
 
 	return r
 }

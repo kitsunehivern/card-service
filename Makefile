@@ -4,8 +4,8 @@ http-mem:
 http-psql:
 	go run . server postgres
 
-mock:
-	go clean -testcache && go test -race -v ./internal/mock/...
+test:
+	go clean -testcache && go test -race -v ./internal/test/...
 
 mockgen:
 	mockery
@@ -21,13 +21,13 @@ docker:
     	-p 5432:5432 \
     	-d postgres:16
 
-update:
+db-update:
 	atlas migrate diff \
       --dir "file://migration" \
       --to  "file://db" \
       --dev-url "postgres://user:pass@localhost:5432/carddb?sslmode=disable"
 
-migrate:
+db-migrate:
 	atlas migrate apply \
       --dir "file://migration" \
       --url "postgres://user:pass@localhost:5432/carddb?sslmode=disable"

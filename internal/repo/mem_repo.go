@@ -20,10 +20,6 @@ func NewMemRepo(ctx context.Context) (IRepository, error) {
 	}, nil
 }
 
-func (repo *memRepo) Close() error {
-	return nil
-}
-
 func (repo *memRepo) CreateCard(ctx context.Context, card *model.Card) error {
 	repo.mutex.Lock()
 	defer repo.mutex.Unlock()
@@ -34,7 +30,7 @@ func (repo *memRepo) CreateCard(ctx context.Context, card *model.Card) error {
 	return nil
 }
 
-func (repo *memRepo) CountCardByUserID(ctx context.Context, userID string) (int32, error) {
+func (repo *memRepo) CountCardByUserID(ctx context.Context, userID string) (int, error) {
 	repo.mutex.Lock()
 	defer repo.mutex.Unlock()
 

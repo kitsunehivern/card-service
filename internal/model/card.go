@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Status string
@@ -16,9 +17,13 @@ const (
 	StatusClosed    Status = "closed"
 )
 
+//go:generate goqueryset -in card.go
+
+// gen:qs
 type Card struct {
-	ID        string    `json:"id" db:"id"`
-	UserID    string    `json:"user_id" db:"user_id"`
+	gorm.Model
+	ID        string    `json:"id" db:"id" gorm:"primaryKey"`
+	UserID    string    `json:"user_id" db:"user_id" gorm:"uniqueIndex"`
 	Debit     int64     `json:"debit" db:"debit"`
 	Credit    int64     `json:"credit" db:"credit"`
 	Status    Status    `json:"status" db:"status"`
