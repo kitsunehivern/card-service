@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package main;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+
+option go_package = "model-service/proto/model;cardpb";
+
+message Card {
+    int64 id = 1;
+    string user_id = 2;
+    int64 debit = 3;
+    int64 credit = 4;
+    string status = 5;
+    string created_at = 6;
+    string updated_at = 7;
+    string deleted_at = 8;
+}
+
+message RequestCardRequest {
+    string user_id = 1 [(buf.validate.field).string.min_len = 1];
+}
+message RequestCardResponse { Card card = 1; }
+
+message ActivateCardRequest {
+    int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+message ActivateCardResponse { Card card = 1; }
+
+message BlockCardRequest {
+    int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+message BlockCardResponse { Card card = 1; }
+
+message UnblockCardRequest {
+    int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+message UnblockCardResponse { Card card = 1; }
+
+message RetireCardRequest {
+    int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+message RetireCardResponse { Card card = 1; }
+
+message CloseCardRequest {
+    int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+message CloseCardResponse { Card card = 1; }
+
+message GetCardRequest {
+    int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+message GetCardResponse { Card card = 1; }
+
+service CardService {
+    rpc RequestCard(RequestCardRequest) returns (RequestCardResponse) {
+        option (google.api.http) = {
+            post: "/card/request"
+            body: "*"
+        };
+    }
+    rpc ActivateCard(ActivateCardRequest) returns (ActivateCardResponse) {
+        option (google.api.http) = {
+            post: "/card/activate"
+            body: "*"
+        };
+    }
+    rpc BlockCard(BlockCardRequest) returns (BlockCardResponse) {
+        option (google.api.http) = {
+            post: "/card/block"
+            body: "*"
+        };
+    }
+    rpc UnblockCard(UnblockCardRequest) returns (UnblockCardResponse) {
+        option (google.api.http) = {
+            post: "/card/unblock"
+            body: "*"
+        };
+    }
+    rpc RetireCard(RetireCardRequest) returns (RetireCardResponse) {
+        option (google.api.http) = {
+            post: "/card/retire"
+            body: "*"
+        };
+    }
+    rpc CloseCard(CloseCardRequest) returns (CloseCardResponse) {
+        option (google.api.http) = {
+            post: "/card/close"
+            body: "*"
+        };
+    }
+    rpc GetCard(GetCardRequest) returns (GetCardResponse) {
+        option (google.api.http) = {
+            get: "/card/get/{id}"
+        };
+    }
+}

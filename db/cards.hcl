@@ -2,7 +2,7 @@ table "cards" {
 	schema = schema.public
 	column "id" {
 		null = false
-		type = uuid
+		type = serial
 		comment = "The ID of the card"
 	}
 
@@ -30,10 +30,21 @@ table "cards" {
 		comment = "The status of the card (requested, active, blocked, ...)"
 	}
 
+	column "created_at" {
+		null = false
+		type = timestamptz
+		comment = "The last time when the card was created"
+	}
+
 	column "updated_at" {
 		null = false
-		type = timestamp
+		type = timestamptz
 		comment = "The last time when the card was updated"
+	}
+
+	column "deleted_at" {
+		type = timestamptz
+		comment = "The last time when the card was deleted"
 	}
 
 	primary_key {

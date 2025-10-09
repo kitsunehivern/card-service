@@ -6,12 +6,14 @@ CREATE SCHEMA "private";
 CREATE TYPE "public"."card_status" AS ENUM ('requested', 'active', 'blocked', 'retired', 'closed');
 -- Create "cards" table
 CREATE TABLE "public"."cards" (
-  "id" uuid NOT NULL,
+  "id" serial NOT NULL,
   "user_id" character varying(64) NOT NULL,
   "credit" integer NOT NULL,
   "debit" integer NOT NULL,
   "status" "public"."card_status" NOT NULL,
-  "updated_at" timestamp NOT NULL,
+  "created_at" timestamptz NOT NULL,
+  "updated_at" timestamptz NOT NULL,
+  "deleted_at" timestamptz NOT NULL,
   PRIMARY KEY ("id")
 );
 -- Create index "idx_user_id" to table: "cards"
@@ -26,5 +28,9 @@ COMMENT ON COLUMN "public"."cards"."credit" IS 'The credit of the card';
 COMMENT ON COLUMN "public"."cards"."debit" IS 'The debit of the card';
 -- Set comment to column: "status" on table: "cards"
 COMMENT ON COLUMN "public"."cards"."status" IS 'The status of the card (requested, active, blocked, ...)';
+-- Set comment to column: "created_at" on table: "cards"
+COMMENT ON COLUMN "public"."cards"."created_at" IS 'The last time when the card was created';
 -- Set comment to column: "updated_at" on table: "cards"
 COMMENT ON COLUMN "public"."cards"."updated_at" IS 'The last time when the card was updated';
+-- Set comment to column: "deleted_at" on table: "cards"
+COMMENT ON COLUMN "public"."cards"."deleted_at" IS 'The last time when the card was deleted';
