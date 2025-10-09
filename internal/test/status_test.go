@@ -20,7 +20,7 @@ func TestCardTransition(t *testing.T) {
 		{
 			name: "success for requested -> active",
 			inputCard: &model.Card{
-				ID:     "card-1",
+				ID:     1,
 				UserID: "user-1",
 				Debit:  0,
 				Credit: 0,
@@ -28,7 +28,7 @@ func TestCardTransition(t *testing.T) {
 			},
 			event: model.EventActivate,
 			expectedCard: &model.Card{
-				ID:     "card-1",
+				ID:     1,
 				UserID: "user-1",
 				Debit:  0,
 				Credit: 0,
@@ -39,7 +39,7 @@ func TestCardTransition(t *testing.T) {
 		{
 			name: "failure for requested -> block",
 			inputCard: &model.Card{
-				ID:     "card-2",
+				ID:     2,
 				UserID: "user-2",
 				Debit:  10,
 				Credit: 0,
@@ -47,7 +47,7 @@ func TestCardTransition(t *testing.T) {
 			},
 			event: model.EventBlock,
 			expectedCard: &model.Card{
-				ID:     "card-2",
+				ID:     2,
 				UserID: "user-2",
 				Debit:  10,
 				Credit: 0,
@@ -58,7 +58,7 @@ func TestCardTransition(t *testing.T) {
 		{
 			name: "failure for active -> retired with debit < credit",
 			inputCard: &model.Card{
-				ID:     "card-3",
+				ID:     3,
 				UserID: "user-3",
 				Debit:  5,
 				Credit: 10,
@@ -66,7 +66,7 @@ func TestCardTransition(t *testing.T) {
 			},
 			event: model.EventRetire,
 			expectedCard: &model.Card{
-				ID:     "card-3",
+				ID:     3,
 				UserID: "user-3",
 				Debit:  5,
 				Credit: 10,
@@ -77,7 +77,7 @@ func TestCardTransition(t *testing.T) {
 		{
 			name: "failure for active -> retired with debit = credit",
 			inputCard: &model.Card{
-				ID:     "card-4",
+				ID:     4,
 				UserID: "user-4",
 				Debit:  10,
 				Credit: 10,
@@ -85,7 +85,7 @@ func TestCardTransition(t *testing.T) {
 			},
 			event: model.EventRetire,
 			expectedCard: &model.Card{
-				ID:     "card-4",
+				ID:     4,
 				UserID: "user-4",
 				Debit:  10,
 				Credit: 10,
@@ -96,7 +96,7 @@ func TestCardTransition(t *testing.T) {
 		{
 			name: "failure for active -> retired with debit > credit",
 			inputCard: &model.Card{
-				ID:     "card-5",
+				ID:     5,
 				UserID: "user-5",
 				Debit:  10,
 				Credit: 5,
@@ -104,7 +104,7 @@ func TestCardTransition(t *testing.T) {
 			},
 			event: model.EventRetire,
 			expectedCard: &model.Card{
-				ID:     "card-5",
+				ID:     5,
 				UserID: "user-5",
 				Debit:  10,
 				Credit: 5,

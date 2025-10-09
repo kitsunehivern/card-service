@@ -1,19 +1,23 @@
 package cmd
 
 import (
+	cardpb "card-service/gen/proto"
 	repo2 "card-service/internal/repo"
 	"card-service/internal/server"
 	"card-service/internal/service"
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/spf13/cobra"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var serverCmd = &cobra.Command{
@@ -44,39 +48,62 @@ var serverCmd = &cobra.Command{
 		}
 
 		cardSvc := service.NewCardService(repo)
-		httpRouter := server.NewHTTPRouter(cardSvc)
-		srv := &http.Server{
-			Addr:    fmt.Sprintf("%s:%d", cfg.Http.Host, cfg.Http.Port),
-			Handler: httpRouter,
+		httpAddr := fmt.Sprintf("%s:%d", cfg.Http.Host, cfg.Http.Port)
+		grpcAddr := fmt.Sprintf("%s:%d", cfg.Grpc.Host, cfg.Grpc.Port)
+
+		go func() {
+			log.Printf("gRPC server listening on %v\n", grpcAddr)
+			if err := server.NewRouter(cardSvc, grpcAddr); err != nil {
+				log.Fatalf("failed to set up gRPC server: %v\n", err)
+			}
+		}()
+
+		dialCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		conn, err := grpc.DialContext(
+			dialCtx,
+			grpcAddr, // <— use the gRPC host:port here
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+			grpc.WithBlock(),
+		)
+		if err != nil {
+			log.Fatalf("failed to dial gRPC at %s: %v", grpcAddr, err)
+		}
+		defer conn.Close()
+
+		mux := runtime.NewServeMux()
+		err = cardpb.RegisterCardServiceHandler(context.Background(), mux, conn)
+		if err != nil {
+			log.Fatalf("failed to register gateway: %v", err)
+		}
+
+		httpServer := &http.Server{
+			Addr:    httpAddr,
+			Handler: mux,
 		}
 
 		errCh := make(chan error, 1)
 		go func() {
-			log.Printf("HTTP server listening on %s:%d", cfg.Http.Host, cfg.Http.Port)
-			errCh <- srv.ListenAndServe()
-		}()
-
-		go func() {
-			log.Printf("gRPC server listening on %s:%d", cfg.Grpc.Host, cfg.Grpc.Port)
-			if err := server.NewGRPCRouter(cardSvc, fmt.Sprintf("%s:%d", cfg.Grpc.Host, cfg.Grpc.Port)); err != nil {
-				fmt.Printf("gRPC server error %v\n", err)
+			log.Printf("HTTP server listening on %v\n", httpAddr)
+			if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+				errCh <- err
 			}
 		}()
 
 		quit := make(chan os.Signal, 1)
-		signal.Notify(quit, os.Interrupt)
+		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 		select {
 		case <-quit:
-			log.Println("Shutting down HTTP server...")
-			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
-			return srv.Shutdown(ctx)
-		case err := <-errCh:
-			if err != nil && !errors.Is(err, http.ErrServerClosed) {
-				return err
-			}
+			_ = httpServer.Shutdown(ctx)
 			return nil
+		case err := <-errCh:
+			return err
 		}
+
+		return nil
 	},
 }
 

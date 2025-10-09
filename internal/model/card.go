@@ -3,7 +3,6 @@ package model
 import (
 	"time"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -22,21 +21,23 @@ const (
 // gen:qs
 type Card struct {
 	gorm.Model
-	ID        string    `json:"id" db:"id" gorm:"primaryKey"`
+	ID        int64     `json:"id" db:"id" gorm:"primaryKey;autoIncrement"`
 	UserID    string    `json:"user_id" db:"user_id" gorm:"uniqueIndex"`
 	Debit     int64     `json:"debit" db:"debit"`
 	Credit    int64     `json:"credit" db:"credit"`
 	Status    Status    `json:"status" db:"status"`
+	CreatedAt time.Time `json:"created_at" db:"updated_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	DeletedAt time.Time `json:"deleted_at" db:"deleted_at"`
 }
 
-func New(userId string) *Card {
+func NewCard(userId string) *Card {
 	return &Card{
-		ID:        uuid.NewString(),
 		UserID:    userId,
 		Debit:     0,
 		Credit:    0,
 		Status:    StatusRequested,
+		DeletedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
 	}
 }

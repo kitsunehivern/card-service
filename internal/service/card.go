@@ -7,6 +7,8 @@ import (
 	"card-service/internal/model"
 	"card-service/internal/repo"
 	"context"
+
+	"buf.build/go/protovalidate"
 )
 
 type CardService struct {
@@ -21,6 +23,10 @@ func NewCardService(r repo.IRepository) *CardService {
 func (cs *CardService) mustEmbedUnimplementedCardServiceServer() {}
 
 func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardRequest) (*cardpb.RequestCardResponse, error) {
+	if err := protovalidate.Validate(req); err != nil {
+		return nil, err
+	}
+
 	count, err := cs.repo.CountCardByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
@@ -30,11 +36,7 @@ func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardR
 		return nil, errmsg.CardAlreadyExists
 	}
 
-	if req.GetUserId() == "" {
-		return nil, errmsg.CardMissingFieldInBody
-	}
-
-	card := model.New(req.GetUserId())
+	card := model.NewCard(req.GetUserId())
 	if err := cs.repo.CreateCard(ctx, card); err != nil {
 		return nil, err
 	}
@@ -42,7 +44,7 @@ func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardR
 	return &cardpb.RequestCardResponse{Card: adapter.CardToProto(card)}, nil
 }
 
-func (cs *CardService) mutateCard(ctx context.Context, id string, event model.Event) (*model.Card, error) {
+func (cs *CardService) mutateCard(ctx context.Context, id int64, event model.Event) (*model.Card, error) {
 	card, err := cs.repo.GetCardByID(ctx, id)
 	if err != nil {
 		return nil, err
@@ -62,6 +64,10 @@ func (cs *CardService) mutateCard(ctx context.Context, id string, event model.Ev
 }
 
 func (cs *CardService) ActivateCard(ctx context.Context, req *cardpb.ActivateCardRequest) (*cardpb.ActivateCardResponse, error) {
+	if err := protovalidate.Validate(req); err != nil {
+		return nil, err
+	}
+
 	c, err := cs.mutateCard(ctx, req.GetId(), model.EventActivate)
 	if err != nil {
 		return nil, err
@@ -70,6 +76,10 @@ func (cs *CardService) ActivateCard(ctx context.Context, req *cardpb.ActivateCar
 }
 
 func (cs *CardService) BlockCard(ctx context.Context, req *cardpb.BlockCardRequest) (*cardpb.BlockCardResponse, error) {
+	if err := protovalidate.Validate(req); err != nil {
+		return nil, err
+	}
+
 	c, err := cs.mutateCard(ctx, req.GetId(), model.EventBlock)
 	if err != nil {
 		return nil, err
@@ -78,6 +88,10 @@ func (cs *CardService) BlockCard(ctx context.Context, req *cardpb.BlockCardReque
 }
 
 func (cs *CardService) UnblockCard(ctx context.Context, req *cardpb.UnblockCardRequest) (*cardpb.UnblockCardResponse, error) {
+	if err := protovalidate.Validate(req); err != nil {
+		return nil, err
+	}
+
 	c, err := cs.mutateCard(ctx, req.GetId(), model.EventUnblock)
 	if err != nil {
 		return nil, err
@@ -86,6 +100,10 @@ func (cs *CardService) UnblockCard(ctx context.Context, req *cardpb.UnblockCardR
 }
 
 func (cs *CardService) RetireCard(ctx context.Context, req *cardpb.RetireCardRequest) (*cardpb.RetireCardResponse, error) {
+	if err := protovalidate.Validate(req); err != nil {
+		return nil, err
+	}
+
 	c, err := cs.mutateCard(ctx, req.GetId(), model.EventRetire)
 	if err != nil {
 		return nil, err
@@ -94,6 +112,10 @@ func (cs *CardService) RetireCard(ctx context.Context, req *cardpb.RetireCardReq
 }
 
 func (cs *CardService) CloseCard(ctx context.Context, req *cardpb.CloseCardRequest) (*cardpb.CloseCardResponse, error) {
+	if err := protovalidate.Validate(req); err != nil {
+		return nil, err
+	}
+
 	c, err := cs.mutateCard(ctx, req.GetId(), model.EventClose)
 	if err != nil {
 		return nil, err
@@ -102,6 +124,10 @@ func (cs *CardService) CloseCard(ctx context.Context, req *cardpb.CloseCardReque
 }
 
 func (cs *CardService) GetCard(ctx context.Context, req *cardpb.GetCardRequest) (*cardpb.GetCardResponse, error) {
+	if err := protovalidate.Validate(req); err != nil {
+		return nil, err
+	}
+
 	c, err := cs.repo.GetCardByID(ctx, req.GetId())
 	if err != nil {
 		return nil, err

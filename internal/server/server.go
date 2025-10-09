@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func NewGRPCRouter(cardSvc *service.CardService, addr string) error {
+func NewRouter(cardSvc *service.CardService, addr string) error {
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
 		return err
