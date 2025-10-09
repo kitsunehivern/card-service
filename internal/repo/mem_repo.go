@@ -5,6 +5,7 @@ import (
 	"card-service/internal/model"
 	"context"
 	"sync"
+	"time"
 )
 
 type memRepo struct {
@@ -76,6 +77,21 @@ func (repo *memRepo) UpdateCardStatus(ctx context.Context, id int64, status mode
 	repo.cards[id].Status = status
 	userID := repo.cards[id].UserID
 	repo.createdUsers[userID].Status = status
+
+	return nil
+}
+
+func (repo *memRepo) CloseExpiredCard(ctx context.Context) error {
+	repo.mutex.Lock()
+	defer repo.mutex.Unlock()
+
+	now := time.Now().UTC()
+
+	for _, card := range repo.cards {
+		if card.ExpirationDate.Before(now) {
+			card.Status = model.StatusClosed
+		}
+	}
 
 	return nil
 }

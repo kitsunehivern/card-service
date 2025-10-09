@@ -24,6 +24,12 @@ table "cards" {
 		comment = "The debit of the card"
 	}
 
+	column "expiration_date" {
+		null = false
+		type = timestamp
+		comment = "The expiration date of the card"
+	}
+
 	column "status" {
 		null = false
 		type = enum.card_status
@@ -32,19 +38,14 @@ table "cards" {
 
 	column "created_at" {
 		null = false
-		type = timestamptz
+		type = timestamp
 		comment = "The last time when the card was created"
 	}
 
 	column "updated_at" {
 		null = false
-		type = timestamptz
+		type = timestamp
 		comment = "The last time when the card was updated"
-	}
-
-	column "deleted_at" {
-		type = timestamptz
-		comment = "The last time when the card was deleted"
 	}
 
 	primary_key {
@@ -53,6 +54,10 @@ table "cards" {
 
 	index "idx_user_id" {
 		columns = [column.user_id]
+	}
+
+	index "idx_expiration_date" {
+		columns = [column.expiration_date]
 	}
 }
 

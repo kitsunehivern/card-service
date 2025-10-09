@@ -14,6 +14,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/go-co-op/gocron/v2"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
@@ -91,6 +92,27 @@ var serverCmd = &cobra.Command{
 			}
 		}()
 
+		cron, err := gocron.NewScheduler()
+		if err != nil {
+			return err
+		}
+
+		job, err := cron.NewJob(
+			gocron.DurationJob(time.Second*10),
+			gocron.NewTask(func() {
+				if err := repo.CloseExpiredCard(context.Background()); err != nil {
+					log.Printf("error closing expired card: %v\n", err)
+				}
+			}),
+		)
+		if err != nil {
+			return err
+		}
+
+		log.Printf("Job ID: %v\n", job.ID())
+
+		cron.Start()
+
 		quit := make(chan os.Signal, 1)
 		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 		select {
@@ -98,6 +120,7 @@ var serverCmd = &cobra.Command{
 			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
 			_ = httpServer.Shutdown(ctx)
+			_ = cron.Shutdown()
 			return nil
 		case err := <-errCh:
 			return err

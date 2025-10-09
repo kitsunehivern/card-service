@@ -64,13 +64,13 @@ func (m *Card) validate(all bool) error {
 
 	// no validation rules for Credit
 
+	// no validation rules for ExpirationDate
+
 	// no validation rules for Status
 
 	// no validation rules for CreatedAt
 
 	// no validation rules for UpdatedAt
-
-	// no validation rules for DeletedAt
 
 	if len(errors) > 0 {
 		return CardMultiError(errors)

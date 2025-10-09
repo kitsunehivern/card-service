@@ -24,17 +24,17 @@ const (
 )
 
 type Card struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Debit         int64                  `protobuf:"varint,3,opt,name=debit,proto3" json:"debit,omitempty"`
-	Credit        int64                  `protobuf:"varint,4,opt,name=credit,proto3" json:"credit,omitempty"`
-	Status        string                 `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"`
-	CreatedAt     string                 `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     string                 `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	DeletedAt     string                 `protobuf:"bytes,8,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId         string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Debit          int64                  `protobuf:"varint,3,opt,name=debit,proto3" json:"debit,omitempty"`
+	Credit         int64                  `protobuf:"varint,4,opt,name=credit,proto3" json:"credit,omitempty"`
+	ExpirationDate string                 `protobuf:"bytes,5,opt,name=expiration_date,json=expirationDate,proto3" json:"expiration_date,omitempty"`
+	Status         string                 `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
+	CreatedAt      string                 `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt      string                 `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *Card) Reset() {
@@ -95,6 +95,13 @@ func (x *Card) GetCredit() int64 {
 	return 0
 }
 
+func (x *Card) GetExpirationDate() string {
+	if x != nil {
+		return x.ExpirationDate
+	}
+	return ""
+}
+
 func (x *Card) GetStatus() string {
 	if x != nil {
 		return x.Status
@@ -112,13 +119,6 @@ func (x *Card) GetCreatedAt() string {
 func (x *Card) GetUpdatedAt() string {
 	if x != nil {
 		return x.UpdatedAt
-	}
-	return ""
-}
-
-func (x *Card) GetDeletedAt() string {
-	if x != nil {
-		return x.DeletedAt
 	}
 	return ""
 }
@@ -744,19 +744,18 @@ var File_card_proto protoreflect.FileDescriptor
 const file_card_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"card.proto\x12\x04main\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\"\xd2\x01\n" +
+	"card.proto\x12\x04main\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\"\xdc\x01\n" +
 	"\x04Card\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x14\n" +
 	"\x05debit\x18\x03 \x01(\x03R\x05debit\x12\x16\n" +
-	"\x06credit\x18\x04 \x01(\x03R\x06credit\x12\x16\n" +
-	"\x06status\x18\x05 \x01(\tR\x06status\x12\x1d\n" +
+	"\x06credit\x18\x04 \x01(\x03R\x06credit\x12'\n" +
+	"\x0fexpiration_date\x18\x05 \x01(\tR\x0eexpirationDate\x12\x16\n" +
+	"\x06status\x18\x06 \x01(\tR\x06status\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\x06 \x01(\tR\tcreatedAt\x12\x1d\n" +
+	"created_at\x18\a \x01(\tR\tcreatedAt\x12\x1d\n" +
 	"\n" +
-	"updated_at\x18\a \x01(\tR\tupdatedAt\x12\x1d\n" +
-	"\n" +
-	"deleted_at\x18\b \x01(\tR\tdeletedAt\"6\n" +
+	"updated_at\x18\b \x01(\tR\tupdatedAt\"6\n" +
 	"\x12RequestCardRequest\x12 \n" +
 	"\auser_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06userId\"5\n" +
 	"\x13RequestCardResponse\x12\x1e\n" +
