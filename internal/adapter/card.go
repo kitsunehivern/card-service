@@ -1,15 +1,16 @@
 package adapter
 
 import (
-	cardpb "card-service/gen/proto"
+	"card-service/gen/proto"
 	"card-service/internal/model"
 	"time"
 )
 
-func CardToProto(card *model.Card) *cardpb.Card {
-	return &cardpb.Card{
+func CardToProto(card *model.Card) *proto.Card {
+	return &proto.Card{
 		Id:             card.ID,
 		UserId:         card.UserID,
+		Type:           string(card.Type),
 		Debit:          card.Debit,
 		Credit:         card.Credit,
 		ExpirationDate: card.ExpirationDate.Format(time.RFC3339),
@@ -19,29 +20,19 @@ func CardToProto(card *model.Card) *cardpb.Card {
 	}
 }
 
-func ProtoToCard(card *cardpb.Card) *model.Card {
-	expirationDate, err := time.Parse(time.RFC3339, card.GetExpirationDate())
-	if err != nil {
-		panic("Cannot parse timestamp")
-	}
-
-	createdAt, err := time.Parse(time.RFC3339, card.GetCreatedAt())
-	if err != nil {
-		panic("Cannot parse timestamp")
-	}
-
-	updatedAt, err := time.Parse(time.RFC3339, card.GetUpdatedAt())
-	if err != nil {
-		panic("Cannot parse timestamp")
-	}
+func ProtoToCard(card *proto.Card) *model.Card {
+	expirationDate, _ := time.Parse(time.RFC3339, card.GetExpirationDate())
+	createdAt, _ := time.Parse(time.RFC3339, card.GetCreatedAt())
+	updatedAt, _ := time.Parse(time.RFC3339, card.GetUpdatedAt())
 
 	return &model.Card{
 		ID:             card.GetId(),
 		UserID:         card.GetUserId(),
+		Type:           model.CardType(card.GetType()),
 		Debit:          card.GetDebit(),
 		Credit:         card.GetCredit(),
 		ExpirationDate: expirationDate,
-		Status:         model.Status(card.GetStatus()),
+		Status:         model.CardStatus(card.GetStatus()),
 		CreatedAt:      createdAt,
 		UpdatedAt:      updatedAt,
 	}

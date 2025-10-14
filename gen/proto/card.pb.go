@@ -4,7 +4,7 @@
 // 	protoc        (unknown)
 // source: card.proto
 
-package cardpb
+package proto
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
@@ -26,13 +26,14 @@ const (
 type Card struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	UserId         string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Debit          int64                  `protobuf:"varint,3,opt,name=debit,proto3" json:"debit,omitempty"`
-	Credit         int64                  `protobuf:"varint,4,opt,name=credit,proto3" json:"credit,omitempty"`
-	ExpirationDate string                 `protobuf:"bytes,5,opt,name=expiration_date,json=expirationDate,proto3" json:"expiration_date,omitempty"`
-	Status         string                 `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
-	CreatedAt      string                 `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt      string                 `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	UserId         int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Type           string                 `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
+	Debit          int64                  `protobuf:"varint,4,opt,name=debit,proto3" json:"debit,omitempty"`
+	Credit         int64                  `protobuf:"varint,5,opt,name=credit,proto3" json:"credit,omitempty"`
+	ExpirationDate string                 `protobuf:"bytes,6,opt,name=expiration_date,json=expirationDate,proto3" json:"expiration_date,omitempty"`
+	Status         string                 `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`
+	CreatedAt      string                 `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt      string                 `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -74,9 +75,16 @@ func (x *Card) GetId() int64 {
 	return 0
 }
 
-func (x *Card) GetUserId() string {
+func (x *Card) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
+	}
+	return 0
+}
+
+func (x *Card) GetType() string {
+	if x != nil {
+		return x.Type
 	}
 	return ""
 }
@@ -125,7 +133,7 @@ func (x *Card) GetUpdatedAt() string {
 
 type RequestCardRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -160,11 +168,11 @@ func (*RequestCardRequest) Descriptor() ([]byte, []int) {
 	return file_card_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *RequestCardRequest) GetUserId() string {
+func (x *RequestCardRequest) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
-	return ""
+	return 0
 }
 
 type RequestCardResponse struct {
@@ -744,20 +752,21 @@ var File_card_proto protoreflect.FileDescriptor
 const file_card_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"card.proto\x12\x04main\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\"\xdc\x01\n" +
+	"card.proto\x12\x04main\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\"\xf0\x01\n" +
 	"\x04Card\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x14\n" +
-	"\x05debit\x18\x03 \x01(\x03R\x05debit\x12\x16\n" +
-	"\x06credit\x18\x04 \x01(\x03R\x06credit\x12'\n" +
-	"\x0fexpiration_date\x18\x05 \x01(\tR\x0eexpirationDate\x12\x16\n" +
-	"\x06status\x18\x06 \x01(\tR\x06status\x12\x1d\n" +
+	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x12\n" +
+	"\x04type\x18\x03 \x01(\tR\x04type\x12\x14\n" +
+	"\x05debit\x18\x04 \x01(\x03R\x05debit\x12\x16\n" +
+	"\x06credit\x18\x05 \x01(\x03R\x06credit\x12'\n" +
+	"\x0fexpiration_date\x18\x06 \x01(\tR\x0eexpirationDate\x12\x16\n" +
+	"\x06status\x18\a \x01(\tR\x06status\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\a \x01(\tR\tcreatedAt\x12\x1d\n" +
+	"created_at\x18\b \x01(\tR\tcreatedAt\x12\x1d\n" +
 	"\n" +
-	"updated_at\x18\b \x01(\tR\tupdatedAt\"6\n" +
+	"updated_at\x18\t \x01(\tR\tupdatedAt\"6\n" +
 	"\x12RequestCardRequest\x12 \n" +
-	"\auser_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06userId\"5\n" +
+	"\auser_id\x18\x01 \x01(\x03B\a\xbaH\x04\"\x02 \x00R\x06userId\"5\n" +
 	"\x13RequestCardResponse\x12\x1e\n" +
 	"\x04card\x18\x01 \x01(\v2\n" +
 	".main.CardR\x04card\".\n" +
@@ -790,17 +799,15 @@ const file_card_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03B\a\xbaH\x04\"\x02 \x00R\x02id\"1\n" +
 	"\x0fGetCardResponse\x12\x1e\n" +
 	"\x04card\x18\x01 \x01(\v2\n" +
-	".main.CardR\x04card2\x81\x05\n" +
+	".main.CardR\x04card2\xa7\x04\n" +
 	"\vCardService\x12\\\n" +
 	"\vRequestCard\x12\x18.main.RequestCardRequest\x1a\x19.main.RequestCardResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/card/request\x12`\n" +
 	"\fActivateCard\x12\x19.main.ActivateCardRequest\x1a\x1a.main.ActivateCardResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/card/activate\x12T\n" +
 	"\tBlockCard\x12\x16.main.BlockCardRequest\x1a\x17.main.BlockCardResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/card/block\x12\\\n" +
-	"\vUnblockCard\x12\x18.main.UnblockCardRequest\x1a\x19.main.UnblockCardResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/card/unblock\x12X\n" +
-	"\n" +
-	"RetireCard\x12\x17.main.RetireCardRequest\x1a\x18.main.RetireCardResponse\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/card/retire\x12T\n" +
+	"\vUnblockCard\x12\x18.main.UnblockCardRequest\x1a\x19.main.UnblockCardResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/card/unblock\x12T\n" +
 	"\tCloseCard\x12\x16.main.CloseCardRequest\x1a\x17.main.CloseCardResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/card/close\x12N\n" +
-	"\aGetCard\x12\x14.main.GetCardRequest\x1a\x15.main.GetCardResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/card/get/{id}Bg\n" +
-	"\bcom.mainB\tCardProtoP\x01Z model-service/proto/model;cardpb\xa2\x02\x03MXX\xaa\x02\x04Main\xca\x02\x04Main\xe2\x02\x10Main\\GPBMetadata\xea\x02\x04Mainb\x06proto3"
+	"\aGetCard\x12\x14.main.GetCardRequest\x1a\x15.main.GetCardResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/card/get/{id}BP\n" +
+	"\bcom.mainB\tCardProtoP\x01Z\tgen/proto\xa2\x02\x03MXX\xaa\x02\x04Main\xca\x02\x04Main\xe2\x02\x10Main\\GPBMetadata\xea\x02\x04Mainb\x06proto3"
 
 var (
 	file_card_proto_rawDescOnce sync.Once
@@ -844,18 +851,16 @@ var file_card_proto_depIdxs = []int32{
 	3,  // 8: main.CardService.ActivateCard:input_type -> main.ActivateCardRequest
 	5,  // 9: main.CardService.BlockCard:input_type -> main.BlockCardRequest
 	7,  // 10: main.CardService.UnblockCard:input_type -> main.UnblockCardRequest
-	9,  // 11: main.CardService.RetireCard:input_type -> main.RetireCardRequest
-	11, // 12: main.CardService.CloseCard:input_type -> main.CloseCardRequest
-	13, // 13: main.CardService.GetCard:input_type -> main.GetCardRequest
-	2,  // 14: main.CardService.RequestCard:output_type -> main.RequestCardResponse
-	4,  // 15: main.CardService.ActivateCard:output_type -> main.ActivateCardResponse
-	6,  // 16: main.CardService.BlockCard:output_type -> main.BlockCardResponse
-	8,  // 17: main.CardService.UnblockCard:output_type -> main.UnblockCardResponse
-	10, // 18: main.CardService.RetireCard:output_type -> main.RetireCardResponse
-	12, // 19: main.CardService.CloseCard:output_type -> main.CloseCardResponse
-	14, // 20: main.CardService.GetCard:output_type -> main.GetCardResponse
-	14, // [14:21] is the sub-list for method output_type
-	7,  // [7:14] is the sub-list for method input_type
+	11, // 11: main.CardService.CloseCard:input_type -> main.CloseCardRequest
+	13, // 12: main.CardService.GetCard:input_type -> main.GetCardRequest
+	2,  // 13: main.CardService.RequestCard:output_type -> main.RequestCardResponse
+	4,  // 14: main.CardService.ActivateCard:output_type -> main.ActivateCardResponse
+	6,  // 15: main.CardService.BlockCard:output_type -> main.BlockCardResponse
+	8,  // 16: main.CardService.UnblockCard:output_type -> main.UnblockCardResponse
+	12, // 17: main.CardService.CloseCard:output_type -> main.CloseCardResponse
+	14, // 18: main.CardService.GetCard:output_type -> main.GetCardResponse
+	13, // [13:19] is the sub-list for method output_type
+	7,  // [7:13] is the sub-list for method input_type
 	7,  // [7:7] is the sub-list for extension type_name
 	7,  // [7:7] is the sub-list for extension extendee
 	0,  // [0:7] is the sub-list for field type_name

@@ -1,9 +1,9 @@
 package service
 
 import (
-	cardpb "card-service/gen/proto"
+	"card-service/gen/proto"
 	"card-service/internal/adapter"
-	"card-service/internal/errmsg"
+	"card-service/internal/apperr"
 	"card-service/internal/model"
 	"card-service/internal/repo"
 	"context"
@@ -12,8 +12,8 @@ import (
 )
 
 type CardService struct {
-	cardpb.UnimplementedCardServiceServer
-	repo repo.IRepository
+	//proto.UnimplementedCardServiceServer
+	repo *repo.Repo
 }
 
 func NewCardService(r repo.IRepository) *CardService {
@@ -22,18 +22,18 @@ func NewCardService(r repo.IRepository) *CardService {
 
 func (cs *CardService) mustEmbedUnimplementedCardServiceServer() {}
 
-func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardRequest) (*cardpb.RequestCardResponse, error) {
+func (cs *CardService) RequestCard(ctx context.Context, req *proto.RequestCardRequest) (*proto.RequestCardResponse, error) {
 	if err := protovalidate.Validate(req); err != nil {
 		return nil, err
 	}
 
-	count, err := cs.repo.CountCardByUserID(ctx, req.GetUserId())
+	count, err := cs.repo.CountCard(ctx, model.CardParams{UserID: req.GetUserId()})
 	if err != nil {
 		return nil, err
 	}
 
 	if count > 0 {
-		return nil, errmsg.CardAlreadyExists
+		return nil, apperr.CardAlreadyExists
 	}
 
 	card := model.NewCard(req.GetUserId())
@@ -41,11 +41,11 @@ func (cs *CardService) RequestCard(ctx context.Context, req *cardpb.RequestCardR
 		return nil, err
 	}
 
-	return &cardpb.RequestCardResponse{Card: adapter.CardToProto(card)}, nil
+	return &proto.RequestCardResponse{Card: adapter.CardToProto(card)}, nil
 }
 
 func (cs *CardService) mutateCard(ctx context.Context, id int64, event model.Event) (*model.Card, error) {
-	card, err := cs.repo.GetCardByID(ctx, id)
+	card, err := cs.repo.GetCard(ctx, model.CardParams{ID: id})
 	if err != nil {
 		return nil, err
 	}
@@ -56,14 +56,14 @@ func (cs *CardService) mutateCard(ctx context.Context, id int64, event model.Eve
 		return nil, err
 	}
 
-	if err := cs.repo.UpdateCardStatus(ctx, id, card.Status); err != nil {
+	if err := cs.repo.UpdateCardStatus(ctx, model.CardParams{ID: id}, card.Status); err != nil {
 		return nil, err
 	}
 
 	return card, nil
 }
 
-func (cs *CardService) ActivateCard(ctx context.Context, req *cardpb.ActivateCardRequest) (*cardpb.ActivateCardResponse, error) {
+func (cs *CardService) ActivateCard(ctx context.Context, req *proto.ActivateCardRequest) (*proto.ActivateCardResponse, error) {
 	if err := protovalidate.Validate(req); err != nil {
 		return nil, err
 	}
@@ -72,10 +72,10 @@ func (cs *CardService) ActivateCard(ctx context.Context, req *cardpb.ActivateCar
 	if err != nil {
 		return nil, err
 	}
-	return &cardpb.ActivateCardResponse{Card: adapter.CardToProto(c)}, nil
+	return &proto.ActivateCardResponse{Card: adapter.CardToProto(c)}, nil
 }
 
-func (cs *CardService) BlockCard(ctx context.Context, req *cardpb.BlockCardRequest) (*cardpb.BlockCardResponse, error) {
+func (cs *CardService) BlockCard(ctx context.Context, req *proto.BlockCardRequest) (*proto.BlockCardResponse, error) {
 	if err := protovalidate.Validate(req); err != nil {
 		return nil, err
 	}
@@ -84,10 +84,10 @@ func (cs *CardService) BlockCard(ctx context.Context, req *cardpb.BlockCardReque
 	if err != nil {
 		return nil, err
 	}
-	return &cardpb.BlockCardResponse{Card: adapter.CardToProto(c)}, nil
+	return &proto.BlockCardResponse{Card: adapter.CardToProto(c)}, nil
 }
 
-func (cs *CardService) UnblockCard(ctx context.Context, req *cardpb.UnblockCardRequest) (*cardpb.UnblockCardResponse, error) {
+func (cs *CardService) UnblockCard(ctx context.Context, req *proto.UnblockCardRequest) (*proto.UnblockCardResponse, error) {
 	if err := protovalidate.Validate(req); err != nil {
 		return nil, err
 	}
@@ -96,22 +96,10 @@ func (cs *CardService) UnblockCard(ctx context.Context, req *cardpb.UnblockCardR
 	if err != nil {
 		return nil, err
 	}
-	return &cardpb.UnblockCardResponse{Card: adapter.CardToProto(c)}, nil
+	return &proto.UnblockCardResponse{Card: adapter.CardToProto(c)}, nil
 }
 
-func (cs *CardService) RetireCard(ctx context.Context, req *cardpb.RetireCardRequest) (*cardpb.RetireCardResponse, error) {
-	if err := protovalidate.Validate(req); err != nil {
-		return nil, err
-	}
-
-	c, err := cs.mutateCard(ctx, req.GetId(), model.EventRetire)
-	if err != nil {
-		return nil, err
-	}
-	return &cardpb.RetireCardResponse{Card: adapter.CardToProto(c)}, nil
-}
-
-func (cs *CardService) CloseCard(ctx context.Context, req *cardpb.CloseCardRequest) (*cardpb.CloseCardResponse, error) {
+func (cs *CardService) CloseCard(ctx context.Context, req *proto.CloseCardRequest) (*proto.CloseCardResponse, error) {
 	if err := protovalidate.Validate(req); err != nil {
 		return nil, err
 	}
@@ -120,17 +108,17 @@ func (cs *CardService) CloseCard(ctx context.Context, req *cardpb.CloseCardReque
 	if err != nil {
 		return nil, err
 	}
-	return &cardpb.CloseCardResponse{Card: adapter.CardToProto(c)}, nil
+	return &proto.CloseCardResponse{Card: adapter.CardToProto(c)}, nil
 }
 
-func (cs *CardService) GetCard(ctx context.Context, req *cardpb.GetCardRequest) (*cardpb.GetCardResponse, error) {
+func (cs *CardService) GetCard(ctx context.Context, req *proto.GetCardRequest) (*proto.GetCardResponse, error) {
 	if err := protovalidate.Validate(req); err != nil {
 		return nil, err
 	}
 
-	c, err := cs.repo.GetCardByID(ctx, req.GetId())
+	c, err := cs.repo.GetCard(ctx, model.CardParams{ID: req.GetId()})
 	if err != nil {
 		return nil, err
 	}
-	return &cardpb.GetCardResponse{Card: adapter.CardToProto(c)}, nil
+	return &proto.GetCardResponse{Card: adapter.CardToProto(c)}, nil
 }

@@ -29,8 +29,8 @@ var serverCmd = &cobra.Command{
 		var repo repo2.IRepository
 		var err error
 		switch args[0] {
-		case "memory":
-			repo, err = repo2.NewMemRepo(context.Background())
+		//case "memory":
+		//	repo, err = repo2.NewMemRepo(context.Background())
 		case "postgres":
 			dsn := fmt.Sprintf("postgres://%v:%v@%v:%v/%v?sslmode=disable",
 				cfg.Psql.Username,
@@ -64,7 +64,7 @@ var serverCmd = &cobra.Command{
 
 		conn, err := grpc.DialContext(
 			dialCtx,
-			grpcAddr, // <— use the gRPC host:port here
+			grpcAddr,
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
 			grpc.WithBlock(),
 		)

@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: card.proto
 
-package cardpb
+package proto
 
 import (
 	context "context"
@@ -23,7 +23,6 @@ const (
 	CardService_ActivateCard_FullMethodName = "/main.CardService/ActivateCard"
 	CardService_BlockCard_FullMethodName    = "/main.CardService/BlockCard"
 	CardService_UnblockCard_FullMethodName  = "/main.CardService/UnblockCard"
-	CardService_RetireCard_FullMethodName   = "/main.CardService/RetireCard"
 	CardService_CloseCard_FullMethodName    = "/main.CardService/CloseCard"
 	CardService_GetCard_FullMethodName      = "/main.CardService/GetCard"
 )
@@ -36,7 +35,6 @@ type CardServiceClient interface {
 	ActivateCard(ctx context.Context, in *ActivateCardRequest, opts ...grpc.CallOption) (*ActivateCardResponse, error)
 	BlockCard(ctx context.Context, in *BlockCardRequest, opts ...grpc.CallOption) (*BlockCardResponse, error)
 	UnblockCard(ctx context.Context, in *UnblockCardRequest, opts ...grpc.CallOption) (*UnblockCardResponse, error)
-	RetireCard(ctx context.Context, in *RetireCardRequest, opts ...grpc.CallOption) (*RetireCardResponse, error)
 	CloseCard(ctx context.Context, in *CloseCardRequest, opts ...grpc.CallOption) (*CloseCardResponse, error)
 	GetCard(ctx context.Context, in *GetCardRequest, opts ...grpc.CallOption) (*GetCardResponse, error)
 }
@@ -85,15 +83,6 @@ func (c *cardServiceClient) UnblockCard(ctx context.Context, in *UnblockCardRequ
 	return out, nil
 }
 
-func (c *cardServiceClient) RetireCard(ctx context.Context, in *RetireCardRequest, opts ...grpc.CallOption) (*RetireCardResponse, error) {
-	out := new(RetireCardResponse)
-	err := c.cc.Invoke(ctx, CardService_RetireCard_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *cardServiceClient) CloseCard(ctx context.Context, in *CloseCardRequest, opts ...grpc.CallOption) (*CloseCardResponse, error) {
 	out := new(CloseCardResponse)
 	err := c.cc.Invoke(ctx, CardService_CloseCard_FullMethodName, in, out, opts...)
@@ -120,7 +109,6 @@ type CardServiceServer interface {
 	ActivateCard(context.Context, *ActivateCardRequest) (*ActivateCardResponse, error)
 	BlockCard(context.Context, *BlockCardRequest) (*BlockCardResponse, error)
 	UnblockCard(context.Context, *UnblockCardRequest) (*UnblockCardResponse, error)
-	RetireCard(context.Context, *RetireCardRequest) (*RetireCardResponse, error)
 	CloseCard(context.Context, *CloseCardRequest) (*CloseCardResponse, error)
 	GetCard(context.Context, *GetCardRequest) (*GetCardResponse, error)
 	mustEmbedUnimplementedCardServiceServer()
@@ -141,9 +129,6 @@ func (UnimplementedCardServiceServer) BlockCard(context.Context, *BlockCardReque
 }
 func (UnimplementedCardServiceServer) UnblockCard(context.Context, *UnblockCardRequest) (*UnblockCardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnblockCard not implemented")
-}
-func (UnimplementedCardServiceServer) RetireCard(context.Context, *RetireCardRequest) (*RetireCardResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RetireCard not implemented")
 }
 func (UnimplementedCardServiceServer) CloseCard(context.Context, *CloseCardRequest) (*CloseCardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CloseCard not implemented")
@@ -236,24 +221,6 @@ func _CardService_UnblockCard_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CardService_RetireCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RetireCardRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CardServiceServer).RetireCard(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CardService_RetireCard_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CardServiceServer).RetireCard(ctx, req.(*RetireCardRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _CardService_CloseCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CloseCardRequest)
 	if err := dec(in); err != nil {
@@ -312,10 +279,6 @@ var CardService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UnblockCard",
 			Handler:    _CardService_UnblockCard_Handler,
-		},
-		{
-			MethodName: "RetireCard",
-			Handler:    _CardService_RetireCard_Handler,
 		},
 		{
 			MethodName: "CloseCard",

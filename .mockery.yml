@@ -14,7 +14,8 @@ template-schema: '{{.Template}}.schema.json'
 packages:
     card-service/internal/repo:
         config:
-            dir: 'gen/mock/repo'
-            filename: 'repository.go'
+            dir: 'gen/mock'
+            filename: 'repo.go'
         interfaces:
-            IRepository:
+            ICardRepo:
+            IUserRepo:

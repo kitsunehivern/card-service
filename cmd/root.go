@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"card-service/config"
+	"card-service/internal/service"
 	"fmt"
+	"math/rand/v2"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -30,4 +32,6 @@ func Execute() {
 	}
 }
 
-func init() {}
+func init() {
+	service.InitFlakeService(rand.Int64())
+}

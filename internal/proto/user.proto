@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package main;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+
+option go_package = "gen/proto";
+
+message User {
+    int64 id = 1;
+    string name = 2;
+    string phone_number = 3;
+    string password_hash = 4;
+    string created_at = 5;
+    string updated_at = 6;
+}
+
+message UserRegisterRequest {
+    string name = 1 [(buf.validate.field).string.min_len = 1];
+    string phone_number = 2 [(buf.validate.field).string.min_len = 8];
+    string password = 3 [(buf.validate.field).string.min_len = 16];
+}
+message UserRegisterResponse {
+    string message = 1;
+    string jwt = 2;
+}
+
+service UserService {
+    rpc RegisterUser(UserRegisterRequest) returns (UserRegisterResponse) {
+        option (google.api.http) = {
+            post: "/auth/register"
+            body: "*"
+        };
+    }
+}

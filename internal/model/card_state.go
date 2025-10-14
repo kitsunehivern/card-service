@@ -1,7 +1,7 @@
 package model
 
 import (
-	"card-service/internal/errmsg"
+	"card-service/internal/apperr"
 	"fmt"
 )
 
@@ -11,25 +11,24 @@ const (
 	EventActivate Event = "activate"
 	EventBlock    Event = "block"
 	EventUnblock  Event = "unblock"
-	EventRetire   Event = "retire"
 	EventClose    Event = "close"
 )
 
 type CardState interface {
-	Name() Status
+	Name() CardStatus
 	Before(card *Card, evt Event) error
 	After(card *Card, evt Event) error
 }
 
-var stateRegistry = map[Status]func() CardState{
-	StatusRequested: func() CardState { return &RequestedState{} },
-	StatusActive:    func() CardState { return &ActiveState{} },
-	StatusBlocked:   func() CardState { return &BlockedState{} },
-	StatusRetired:   func() CardState { return &RetiredState{} },
-	StatusClosed:    func() CardState { return &ClosedState{} },
+var stateRegistry = map[CardStatus]func() CardState{
+	CardStatusRequested: func() CardState { return &RequestedState{} },
+	CardStatusActive:    func() CardState { return &ActiveState{} },
+	CardStatusBlocked:   func() CardState { return &BlockedState{} },
+	CardStatusExpired:   func() CardState { return &ExpiredState{} },
+	CardStatusClosed:    func() CardState { return &ClosedState{} },
 }
 
-func createState(status Status) CardState {
+func createState(status CardStatus) CardState {
 	if create, ok := stateRegistry[status]; ok {
 		return create()
 	}
@@ -56,7 +55,7 @@ func NewCardSM(input CardSMInput) *CardSM {
 type ConditionFunc func(*Card) bool
 
 type NextStateCondition struct {
-	next       Status
+	next       CardStatus
 	conditions []ConditionFunc
 }
 
@@ -68,12 +67,12 @@ func (csm *CardSM) Validate(evt Event) error {
 
 	state, ok := events[evt]
 	if !ok {
-		return errmsg.CardInvalidStateTransition
+		return apperr.CardInvalidStateTransition
 	}
 
 	for _, check := range state.conditions {
 		if !check(csm.input.card) {
-			return errmsg.CardInvalidStateTransition
+			return apperr.CardInvalidStateTransition
 		}
 	}
 
@@ -84,25 +83,23 @@ func (csm *CardSM) Action(evt Event) CardState {
 	return createState(transConditions[csm.input.card.Status][evt].next)
 }
 
-func canBeRetired(card *Card) bool {
-	return card.Debit > card.Credit
+func canBeClosed(card *Card) bool {
+	return card.Debit >= card.Credit
 }
 
-var transConditions = map[Status]map[Event]NextStateCondition{
-	StatusRequested: {
-		EventActivate: {next: StatusActive},
-		EventClose:    {next: StatusClosed},
-	}, StatusActive: {
-		EventBlock:  {next: StatusBlocked},
-		EventClose:  {next: StatusClosed},
-		EventRetire: {next: StatusRetired, conditions: []ConditionFunc{canBeRetired}},
-	}, StatusBlocked: {
-		EventUnblock: {next: StatusActive},
-		EventClose:   {next: StatusClosed},
-		EventRetire:  {next: StatusRetired, conditions: []ConditionFunc{canBeRetired}},
-	}, StatusRetired: {
-		EventClose: {next: StatusClosed},
-	}, StatusClosed: {},
+var transConditions = map[CardStatus]map[Event]NextStateCondition{
+	CardStatusRequested: {
+		EventActivate: {next: CardStatusActive},
+		EventClose:    {next: CardStatusClosed, conditions: []ConditionFunc{canBeClosed}},
+	}, CardStatusActive: {
+		EventBlock: {next: CardStatusBlocked},
+		EventClose: {next: CardStatusClosed, conditions: []ConditionFunc{canBeClosed}},
+	}, CardStatusBlocked: {
+		EventUnblock: {next: CardStatusActive},
+		EventClose:   {next: CardStatusClosed, conditions: []ConditionFunc{canBeClosed}},
+	}, CardStatusExpired: {
+		EventClose: {next: CardStatusClosed, conditions: []ConditionFunc{canBeClosed}},
+	}, CardStatusClosed: {},
 }
 
 func (csm *CardSM) Transition(evt Event) error {
@@ -130,30 +127,30 @@ func (csm *CardSM) Transition(evt Event) error {
 
 type RequestedState struct{}
 
-func (state *RequestedState) Name() Status                       { return StatusRequested }
+func (state *RequestedState) Name() CardStatus                   { return CardStatusRequested }
 func (state *RequestedState) Before(card *Card, evt Event) error { return nil }
 func (state *RequestedState) After(card *Card, evt Event) error  { return nil }
 
 type ActiveState struct{}
 
-func (state *ActiveState) Name() Status                       { return StatusActive }
+func (state *ActiveState) Name() CardStatus                   { return CardStatusActive }
 func (state *ActiveState) Before(card *Card, evt Event) error { return nil }
 func (state *ActiveState) After(card *Card, evt Event) error  { return nil }
 
 type BlockedState struct{}
 
-func (state *BlockedState) Name() Status                       { return StatusBlocked }
+func (state *BlockedState) Name() CardStatus                   { return CardStatusBlocked }
 func (state *BlockedState) Before(card *Card, evt Event) error { return nil }
 func (state *BlockedState) After(card *Card, evt Event) error  { return nil }
 
-type RetiredState struct{}
+type ExpiredState struct{}
 
-func (state *RetiredState) Name() Status                       { return StatusRetired }
-func (state *RetiredState) Before(card *Card, evt Event) error { return nil }
-func (state *RetiredState) After(card *Card, evt Event) error  { return nil }
+func (state *ExpiredState) Name() CardStatus                   { return CardStatusExpired }
+func (state *ExpiredState) Before(card *Card, evt Event) error { return nil }
+func (state *ExpiredState) After(card *Card, evt Event) error  { return nil }
 
 type ClosedState struct{}
 
-func (state *ClosedState) Name() Status                       { return StatusClosed }
+func (state *ClosedState) Name() CardStatus                   { return CardStatusClosed }
 func (state *ClosedState) Before(card *Card, evt Event) error { return nil }
 func (state *ClosedState) After(card *Card, evt Event) error  { return nil }

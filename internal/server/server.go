@@ -1,7 +1,7 @@
 package server
 
 import (
-	cardpb "card-service/gen/proto"
+	"card-service/gen/proto"
 	"card-service/internal/service"
 	"net"
 
@@ -15,7 +15,7 @@ func NewRouter(cardSvc *service.CardService, addr string) error {
 	}
 
 	s := grpc.NewServer()
-	cardpb.RegisterCardServiceServer(s, cardSvc)
+	proto.RegisterCardServiceServer(s, cardSvc)
 
 	return s.Serve(lis)
 }

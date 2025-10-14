@@ -1,7 +1,7 @@
 package test
 
 import (
-	"card-service/internal/errmsg"
+	"card-service/internal/apperr"
 	"card-service/internal/model"
 	"fmt"
 	"testing"
@@ -21,18 +21,20 @@ func TestCardTransition(t *testing.T) {
 			name: "success for requested -> active",
 			inputCard: &model.Card{
 				ID:     1,
-				UserID: "user-1",
+				UserID: 1,
+				Type:   model.CardTypeGold,
 				Debit:  0,
 				Credit: 0,
-				Status: model.StatusRequested,
+				Status: model.CardStatusRequested,
 			},
 			event: model.EventActivate,
 			expectedCard: &model.Card{
 				ID:     1,
-				UserID: "user-1",
+				UserID: 1,
+				Type:   model.CardTypeGold,
 				Debit:  0,
 				Credit: 0,
-				Status: model.StatusActive,
+				Status: model.CardStatusActive,
 			},
 			expectedError: nil,
 		},
@@ -40,75 +42,83 @@ func TestCardTransition(t *testing.T) {
 			name: "failure for requested -> block",
 			inputCard: &model.Card{
 				ID:     2,
-				UserID: "user-2",
+				UserID: 2,
+				Type:   model.CardTypeGold,
 				Debit:  10,
 				Credit: 0,
-				Status: model.StatusRequested,
+				Status: model.CardStatusRequested,
 			},
 			event: model.EventBlock,
 			expectedCard: &model.Card{
 				ID:     2,
-				UserID: "user-2",
+				UserID: 2,
+				Type:   model.CardTypeGold,
 				Debit:  10,
 				Credit: 0,
-				Status: model.StatusRequested,
+				Status: model.CardStatusRequested,
 			},
-			expectedError: errmsg.CardInvalidStateTransition,
+			expectedError: apperr.CardInvalidStateTransition,
 		},
 		{
-			name: "failure for active -> retired with debit < credit",
+			name: "failure for active -> closed with debit < credit",
 			inputCard: &model.Card{
 				ID:     3,
-				UserID: "user-3",
+				UserID: 3,
+				Type:   model.CardTypeDiamond,
 				Debit:  5,
 				Credit: 10,
-				Status: model.StatusActive,
+				Status: model.CardStatusActive,
 			},
-			event: model.EventRetire,
+			event: model.EventClose,
 			expectedCard: &model.Card{
 				ID:     3,
-				UserID: "user-3",
+				UserID: 3,
+				Type:   model.CardTypeDiamond,
 				Debit:  5,
 				Credit: 10,
-				Status: model.StatusActive,
+				Status: model.CardStatusActive,
 			},
-			expectedError: errmsg.CardInvalidStateTransition,
+			expectedError: apperr.CardInvalidStateTransition,
 		},
 		{
-			name: "failure for active -> retired with debit = credit",
+			name: "success for active -> closed with debit = credit",
 			inputCard: &model.Card{
 				ID:     4,
-				UserID: "user-4",
+				UserID: 4,
+				Type:   model.CardTypeDiamond,
 				Debit:  10,
 				Credit: 10,
-				Status: model.StatusActive,
+				Status: model.CardStatusActive,
 			},
-			event: model.EventRetire,
+			event: model.EventClose,
 			expectedCard: &model.Card{
 				ID:     4,
-				UserID: "user-4",
+				UserID: 4,
+				Type:   model.CardTypeDiamond,
 				Debit:  10,
 				Credit: 10,
-				Status: model.StatusActive,
+				Status: model.CardStatusClosed,
 			},
-			expectedError: errmsg.CardInvalidStateTransition,
+			expectedError: nil,
 		},
 		{
-			name: "failure for active -> retired with debit > credit",
+			name: "success for active -> closed with debit > credit",
 			inputCard: &model.Card{
 				ID:     5,
-				UserID: "user-5",
+				UserID: 5,
+				Type:   model.CardTypePlatinum,
 				Debit:  10,
 				Credit: 5,
-				Status: model.StatusActive,
+				Status: model.CardStatusActive,
 			},
-			event: model.EventRetire,
+			event: model.EventClose,
 			expectedCard: &model.Card{
 				ID:     5,
-				UserID: "user-5",
+				UserID: 5,
+				Type:   model.CardTypePlatinum,
 				Debit:  10,
 				Credit: 5,
-				Status: model.StatusRetired,
+				Status: model.CardStatusClosed,
 			},
 			expectedError: nil,
 		},
@@ -128,6 +138,7 @@ func TestCardTransition(t *testing.T) {
 
 			require.Equal(t, tc.expectedCard.ID, card.ID)
 			require.Equal(t, tc.expectedCard.UserID, card.UserID)
+			require.Equal(t, tc.expectedCard.Type, card.Type)
 			require.Equal(t, tc.expectedCard.Credit, card.Credit)
 			require.Equal(t, tc.expectedCard.Debit, card.Debit)
 			require.Equal(t, tc.expectedCard.Status, card.Status)

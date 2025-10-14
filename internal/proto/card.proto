@@ -5,21 +5,22 @@ package main;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 
-option go_package = "model-service/proto/model;cardpb";
+option go_package = "gen/proto";
 
 message Card {
     int64 id = 1;
-    string user_id = 2;
-    int64 debit = 3;
-    int64 credit = 4;
-    string expiration_date = 5;
-    string status = 6;
-    string created_at = 7;
-    string updated_at = 8;
+    int64 user_id = 2;
+    string type = 3;
+    int64 debit = 4;
+    int64 credit = 5;
+    string expiration_date = 6;
+    string status = 7;
+    string created_at = 8;
+    string updated_at = 9;
 }
 
 message RequestCardRequest {
-    string user_id = 1 [(buf.validate.field).string.min_len = 1];
+    int64 user_id = 1 [(buf.validate.field).int64.gt = 0];
 }
 message RequestCardResponse { Card card = 1; }
 
@@ -75,12 +76,6 @@ service CardService {
     rpc UnblockCard(UnblockCardRequest) returns (UnblockCardResponse) {
         option (google.api.http) = {
             post: "/card/unblock"
-            body: "*"
-        };
-    }
-    rpc RetireCard(RetireCardRequest) returns (RetireCardResponse) {
-        option (google.api.http) = {
-            post: "/card/retire"
             body: "*"
         };
     }

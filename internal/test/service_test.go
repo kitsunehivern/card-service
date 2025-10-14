@@ -1,10 +1,10 @@
 package test
 
 import (
-	"card-service/gen/mock/repo"
+	imock "card-service/gen/mock"
 	cardpb "card-service/gen/proto"
 	"card-service/internal/adapter"
-	"card-service/internal/errmsg"
+	"card-service/internal/apperr"
 	"card-service/internal/model"
 	"card-service/internal/service"
 	"context"
@@ -15,8 +15,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func newServiceWithMock(t *testing.T) (*service.CardService, *repo.MockIRepository) {
-	repo := repo.NewMockIRepository(t)
+func newServiceWithMock(t *testing.T) (*service.CardService, *imock.MockICardRepo) {
+	repo := imock.NewMockICardRepo(t)
 	svc := service.NewCardService(repo)
 	return svc, repo
 }
@@ -24,18 +24,18 @@ func newServiceWithMock(t *testing.T) (*service.CardService, *repo.MockIReposito
 func TestRequestCardService(t *testing.T) {
 	testcases := []struct {
 		name           string
-		userIDs        []string
+		userIDs        []int64
 		expectedErrors []error
 	}{
 		{
 			name:           "success for different user ids",
-			userIDs:        []string{"user-1", "user-2", "user-3"},
+			userIDs:        []int64{1, 2, 3},
 			expectedErrors: []error{nil, nil, nil},
 		},
 		{
 			name:           "failure for any two same user ids",
-			userIDs:        []string{"user-1", "user-2", "user-1"},
-			expectedErrors: []error{nil, nil, errmsg.CardAlreadyExists},
+			userIDs:        []int64{1, 2, 1},
+			expectedErrors: []error{nil, nil, apperr.CardAlreadyExists},
 		},
 	}
 
@@ -47,12 +47,12 @@ func TestRequestCardService(t *testing.T) {
 		t.Run(fmt.Sprintf("test case %v: %v", ti+1, tc.name), func(t *testing.T) {
 			svc, repo := newServiceWithMock(t)
 
-			createdUsers := map[string]bool{}
-			tmpCreatedUsers := map[string]bool{}
+			createdUsers := map[int64]bool{}
+			tmpCreatedUsers := map[int64]bool{}
 			for i := 0; i < len(tc.userIDs); i++ {
 				repo.
-					On("CountCardByUserID", mock.Anything, mock.AnythingOfType("string")).
-					Return(func(ctx context.Context, userID string) (int, error) {
+					On("CountCardByUserID", mock.Anything, mock.AnythingOfType("int64")).
+					Return(func(ctx context.Context, userID int64) (int, error) {
 						_, ok := createdUsers[userID]
 						if ok {
 							return 1, nil
@@ -86,11 +86,11 @@ func TestRequestCardService(t *testing.T) {
 					require.NotNil(t, resp)
 
 					card := adapter.ProtoToCard(resp.GetCard())
-					//require.NotEqual(t, int64(0), card.ID)
+					require.NotEqual(t, int64(0), card.ID)
 					require.Equal(t, tc.userIDs[i], card.UserID)
 					require.Equal(t, int64(0), card.Debit)
 					require.Equal(t, int64(0), card.Credit)
-					require.Equal(t, model.StatusRequested, card.Status)
+					require.Equal(t, model.CardStatusRequested, card.Status)
 				}
 			}
 

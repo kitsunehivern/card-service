@@ -1,15 +1,22 @@
 table "cards" {
 	schema = schema.public
+
 	column "id" {
 		null = false
-		type = serial
+		type = integer
 		comment = "The ID of the card"
 	}
 
 	column "user_id" {
 		null = false
-		type = varchar(64)
+		type = integer
 		comment = "The ID of the owner"
+	}
+
+	column "type" {
+		null = false
+		type = enum.card_type
+		comment = "The type of the card"
 	}
 
 	column "credit" {
@@ -39,17 +46,23 @@ table "cards" {
 	column "created_at" {
 		null = false
 		type = timestamp
-		comment = "The last time when the card was created"
+		comment = "The time when the card was first created"
 	}
 
 	column "updated_at" {
 		null = false
 		type = timestamp
-		comment = "The last time when the card was updated"
+		comment = "The time when the card was last updated"
 	}
 
 	primary_key {
 		columns = [column.id]
+	}
+
+	foreign_key "fk_user_id" {
+		columns = [column.user_id]
+		ref_columns = [table.users.column.id]
+		on_delete = CASCADE
 	}
 
 	index "idx_user_id" {
@@ -63,5 +76,10 @@ table "cards" {
 
 enum "card_status" {
 	schema = schema.public
-    values = ["requested", "active", "blocked", "retired", "closed"]
+    values = ["requested", "active", "blocked", "expired", "closed"]
+}
+
+enum "card_type" {
+	schema = schema.public
+	values = ["gold", "diamond", "platinum"]
 }

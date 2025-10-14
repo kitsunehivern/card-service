@@ -13,6 +13,9 @@ mockgen:
 protogen:
 	mkdir -p gen/proto && buf generate
 
+querysetgen:
+	go generate ./internal/model/...
+
 docker:
 	docker run --name carddb \
     	-e POSTGRES_USER=user \
