@@ -12,10 +12,10 @@ message Card {
     string user_id = 2;
     int64 debit = 3;
     int64 credit = 4;
-    string status = 5;
-    string created_at = 6;
-    string updated_at = 7;
-    string deleted_at = 8;
+    string expiration_date = 5;
+    string status = 6;
+    string created_at = 7;
+    string updated_at = 8;
 }
 
 message RequestCardRequest {
